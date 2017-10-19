@@ -29,6 +29,8 @@ import javafx.stage.WindowEvent;
 public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	private static Log log = LogFactory.getLog(ClientFxGUI.class);
+	
+	//dsddsd
 
 	private Stage stage;
 	private static LogInGuiController lc;
