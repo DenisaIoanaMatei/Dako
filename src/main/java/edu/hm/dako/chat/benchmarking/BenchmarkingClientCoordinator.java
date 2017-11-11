@@ -15,6 +15,8 @@ import edu.hm.dako.chat.common.CpuUtilisationWatch;
 import edu.hm.dako.chat.common.DistributionMetrics;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.common.SharedClientStatistics;
+/*
+* Test-Kommentar*/
 
 /**
  * Basisklasse zum Starten eines Benchmarks
