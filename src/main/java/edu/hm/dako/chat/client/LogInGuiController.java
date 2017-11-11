@@ -71,7 +71,7 @@ public class LogInGuiController implements Initializable {
 
 		// Benutzernamen pruefen
 
-		userName = txtUsername.getText();
+		userName = txtUsername.getText() + System.getProperty("user.name"); 
 		if (userName.isEmpty() == true) {
 			log.debug("Benutzername ist leer");
 			appController.setErrorMessage("Chat-Client", "Benutzername fehlt", 1);
