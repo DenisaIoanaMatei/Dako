@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.JProgressBar;
 
+import edu.hm.dako.chat.common.ImplementationType;
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.hm.dako.chat.common.SystemConstants;
@@ -1035,7 +1036,11 @@ public class BenchmarkingClientGuiFx2 extends Application
 			iParam.setImplementationType(
 					edu.hm.dako.chat.common.ImplementationType.TCPSimpleImplementation);
 			implType.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
-		} else {
+		}
+		else if (item.equals(SystemConstants.IMPL_TCP_ADVANCED)){
+			iParam.setImplementationType(
+					edu.hm.dako.chat.common.ImplementationType.TCPAdvancedImplementation);
+		}else {
 			setAlert("Kein Implementierungstyp ausgew\u00c4hlt!");
 			startable = false;
 			implType.setTextFill(Color.web(SystemConstants.RED_COLOR));

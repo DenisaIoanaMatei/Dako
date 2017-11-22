@@ -445,6 +445,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 		ImplementationType serverImpl = null;
 		if (implType.equals(SystemConstants.IMPL_TCP_SIMPLE)) {
 			serverImpl = ImplementationType.TCPSimpleImplementation;
+		} else if (implType.equals(SystemConstants.IMPL_TCP_ADVANCED)) {
+			serverImpl = ImplementationType.TCPAdvancedImplementation;
 		}
 
 		try {
@@ -455,7 +457,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			ExceptionHandler.logException(e);
 			throw new Exception(e);
 		}
-		if (startable == false) {
+		if (!startable) {
 			setAlert("Bitte Korrigieren sie die rot markierten Felder");
 		} else {
 			// Server starten
