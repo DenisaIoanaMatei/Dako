@@ -145,11 +145,9 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 
 		// Eventzaehler und Confirmzaehler fuer Testzwecke erhoehen
 		sharedClientData.eventCounter.getAndIncrement();
-		sharedClientData.confirmCounter.getAndIncrement();
 		int events = SharedClientData.messageEvents.incrementAndGet();
 
 		log.debug("MessageEventCounter: " + events);
-		log.debug("ConfirmCounter: " + sharedClientData.confirmCounter.get());
 
 		// Empfangene Chat-Nachricht an User Interface zur
 		// Darstellung uebergeben
