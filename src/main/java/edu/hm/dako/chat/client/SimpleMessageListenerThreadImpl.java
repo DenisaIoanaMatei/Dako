@@ -143,12 +143,13 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 		log.debug(
 				"Chat-Message-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
 
-		// Eventzaehler und Cinfirmzaehler fuer Testzwecke erhoehen
+		// Eventzaehler und Confirmzaehler fuer Testzwecke erhoehen
 		sharedClientData.eventCounter.getAndIncrement();
 		sharedClientData.confirmCounter.getAndIncrement();
 		int events = SharedClientData.messageEvents.incrementAndGet();
 
 		log.debug("MessageEventCounter: " + events);
+		log.debug("ConfirmCounter: " + sharedClientData.confirmCounter.get());
 
 		// Empfangene Chat-Nachricht an User Interface zur
 		// Darstellung uebergeben
