@@ -145,6 +145,7 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 
 		// Eventzaehler fuer Testzwecke erhoehen
 		sharedClientData.eventCounter.getAndIncrement();
+		sharedClientData.confirmCounter.getAndIncrement();
 		int events = SharedClientData.messageEvents.incrementAndGet();
 
 		log.debug("MessageEventCounter: " + events);
