@@ -24,11 +24,11 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 	private static Log log = LogFactory.getLog(SimpleChatServerImpl.class);
 
 	// Threadpool fuer Worker-Threads
-	private final ExecutorService executorService;
+	protected final ExecutorService executorService;
 
 	// Socket fuer den Listener, der alle Verbindungsaufbauwuensche der Clients
 	// entgegennimmt
-	private ServerSocketInterface socket;
+	protected ServerSocketInterface socket;
 
 	/**
 	 * Konstruktor
@@ -106,6 +106,12 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 				ExceptionHandler.logException(e);
 			}
 		}
+		deleteUserList();
+
+
+	}
+
+	protected void deleteUserList() throws Exception {
 
 		// Loeschen der Userliste
 		clients.deleteAll();

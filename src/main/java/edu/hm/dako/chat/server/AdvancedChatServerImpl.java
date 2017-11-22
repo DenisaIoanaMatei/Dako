@@ -1,0 +1,96 @@
+package edu.hm.dako.chat.server;
+
+import edu.hm.dako.chat.common.ExceptionHandler;
+import edu.hm.dako.chat.connection.Connection;
+import edu.hm.dako.chat.connection.ServerSocketInterface;
+import javafx.concurrent.Task;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * <p/>
+ * Advanced-Chat-Server-Implementierung
+ *
+ * @author Nisi
+ */
+
+public class AdvancedChatServerImpl extends SimpleChatServerImpl {
+
+    private static Log log = LogFactory.getLog(AdvancedChatServerImpl.class);
+
+    /**
+     * Konstruktor
+     *
+     * @param executorService
+     * @param socket
+     * @param serverGuiInterface
+     */
+    public AdvancedChatServerImpl(ExecutorService executorService,
+                                  ServerSocketInterface socket,
+                                  ChatServerGuiInterface serverGuiInterface) {
+        super(executorService, socket, serverGuiInterface);
+
+        counter = new SharedServerCounter();
+        counter.logoutCounter = new AtomicInteger(0);
+        counter.eventCounter = new AtomicInteger(0);
+        counter.confirmCounter = new AtomicInteger(0);
+
+        log.debug("AdvancedChatServerImpl konstruiert");
+    }
+
+    @Override
+    public void start() {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                // Clientliste erzeugen
+                clients = SharedChatClientList.getInstance();
+
+                while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
+                    try {
+                        // Auf ankommende Verbindungsaufbauwuensche warten
+                        System.out.println(
+                                "AdvancedChatServer wartet auf Verbindungsanfragen von Clients...");
+
+                        Connection connection = socket.accept();
+                        log.debug("Neuer Verbindungsaufbauwunsch empfangen");
+
+                        // Neuen Workerthread starten
+                        executorService.submit(new SimpleChatWorkerThreadImpl(connection, clients,
+                                counter, serverGuiInterface));
+                    } catch (Exception e) {
+                        if (socket.isClosed()) {
+                            log.debug("Socket wurde geschlossen");
+                        } else {
+                            log.error(
+                                    "Exception beim Entgegennehmen von Verbindungsaufbauwuenschen: " + e);
+                            ExceptionHandler.logException(e);
+                        }
+                    }
+                }
+                return null;
+            }
+        };
+
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
+    }
+
+    @Override
+    protected void deleteUserList() throws Exception {
+
+        // Loeschen der Userliste
+        clients.deleteAll();
+        Thread.currentThread().interrupt();
+        socket.close();
+        log.debug("Listen-Socket geschlossen");
+        executorService.shutdown();
+        log.debug("Threadpool freigegeben");
+
+        System.out.println("AdvancedChatServer beendet sich");
+    }
+}

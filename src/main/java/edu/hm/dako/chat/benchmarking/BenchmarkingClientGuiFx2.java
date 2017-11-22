@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 import javax.swing.JProgressBar;
 
-import edu.hm.dako.chat.common.ImplementationType;
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.hm.dako.chat.common.SystemConstants;
@@ -846,7 +845,7 @@ public class BenchmarkingClientGuiFx2 extends Application
 			} else {
 				System.out.println("Serverport: " + iServerPort);
 				iParam.setRemoteServerPort(iServerPort.intValue());
-				serverport.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+				serverport.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 			}
 		} else {
 			startable = false;
@@ -871,7 +870,7 @@ public class BenchmarkingClientGuiFx2 extends Application
 			Integer iThinkTime = new Integer(textFieldThinkTime.getText());
 			System.out.println("Denkzeit: " + iThinkTime + " ms");
 			iParam.setClientThinkTime(iThinkTime.intValue());
-			thinkTime.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+			thinkTime.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 		}
 	}
 
@@ -891,7 +890,7 @@ public class BenchmarkingClientGuiFx2 extends Application
 			} else {
 				System.out.println("Anzahl Client-Threads:" + iClientThreads);
 				iParam.setNumberOfClients(iClientThreads.intValue());
-				numberOfClientThreads.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+				numberOfClientThreads.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 			}
 		} else {
 			startable = false;
@@ -918,7 +917,7 @@ public class BenchmarkingClientGuiFx2 extends Application
 			} else {
 				System.out.println("Anzahl Nachrichten:" + iNumberOfMessages);
 				iParam.setNumberOfMessages(iNumberOfMessages.intValue());
-				numberOfMessagesPerClients.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+				numberOfMessagesPerClients.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 			}
 		} else {
 			startable = false;
@@ -945,7 +944,7 @@ public class BenchmarkingClientGuiFx2 extends Application
 			} else {
 				System.out.println("Nachrichtenlaenge:" + iMessageLength + " Byte");
 				iParam.setMessageLength(iMessageLength.intValue());
-				messageLength.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+				messageLength.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 			}
 		} else {
 			startable = false;
@@ -969,7 +968,7 @@ public class BenchmarkingClientGuiFx2 extends Application
 			Integer iResponseTimeout = new Integer(textFieldResponseTimeout.getText());
 			System.out.println("Response-Timeout:" + iResponseTimeout);
 			iParam.setResponseTimeout(iResponseTimeout.intValue());
-			responseTimeout.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+			responseTimeout.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 
 		}
 	}
@@ -989,7 +988,7 @@ public class BenchmarkingClientGuiFx2 extends Application
 			} else {
 				System.out.println("Maximale Anzahl Wiederholungen:" + iNumberOfMaxRetries);
 				iParam.setNumberOfRetries(iNumberOfMaxRetries.intValue());
-				numberOfMaxRetries.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+				numberOfMaxRetries.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 			}
 		} else {
 			// nicht numerisch
@@ -1009,17 +1008,17 @@ public class BenchmarkingClientGuiFx2 extends Application
 			System.out.println("RemoteServerAdress:" + testString);
 			iParam.setRemoteServerAddress(testString);
 
-			serverIpAddress.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+			serverIpAddress.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 		} else if (IPV6_PATTERN.matcher(testString).matches()) {
 			System.out.println("RemoteServerAdress:" + testString);
 			iParam.setRemoteServerAddress(testString);
 
-			serverIpAddress.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+			serverIpAddress.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 		} else if (IPV4_PATTERN.matcher(testString).matches()) {
 			System.out.println("RemoteServerAdress:" + testString);
 			iParam.setRemoteServerAddress(testString);
 
-			serverIpAddress.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+			serverIpAddress.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 		} else {
 			startable = false;
 			serverIpAddress.setTextFill(Color.web(SystemConstants.RED_COLOR));
@@ -1035,7 +1034,7 @@ public class BenchmarkingClientGuiFx2 extends Application
 		if (item.equals(SystemConstants.IMPL_TCP_SIMPLE)) {
 			iParam.setImplementationType(
 					edu.hm.dako.chat.common.ImplementationType.TCPSimpleImplementation);
-			implType.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
+			implType.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
 		}
 		else if (item.equals(SystemConstants.IMPL_TCP_ADVANCED)){
 			iParam.setImplementationType(
