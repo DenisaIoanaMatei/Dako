@@ -443,7 +443,7 @@ public class ChatPDU implements Serializable {
 	/**
 	 * Erzeugen einer Login-Response-PDU mit Fehlermeldung
 	 * 
-	 * @param pdu
+	 * @param receivedPdu
 	 *          Empfangene PDU
 	 * @param errorCode
 	 *          Fehlercode, der in der PDU uebertragen werden soll
@@ -458,6 +458,28 @@ public class ChatPDU implements Serializable {
 		pdu.setUserName(receivedPdu.getUserName());
 		pdu.setClientStatus(ClientConversationStatus.UNREGISTERED);
 		pdu.setErrorCode(errorCode);
+		return pdu;
+	}
+
+	/**
+	 * Erzeugen einer Message-Confirm-PDU
+	 *
+	 * @param userName
+	 *          Name des Clients
+	 * @param receivedPdu
+	 *          Empfangene PDU
+	 * @return Erzeugte PDU
+	 */
+	public static ChatPDU createMessageConfirm(String userName,
+                                               ChatPDU receivedPdu) {
+
+		ChatPDU pdu = new ChatPDU();
+		pdu.setPduType(PduType.MESSAGE_CONFIRM);
+		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
+		pdu.setClientThreadName(Thread.currentThread().getName());
+		pdu.setServerThreadName(receivedPdu.getServerThreadName());
+		pdu.setUserName(userName);
+		pdu.setEventUserName(receivedPdu.getEventUserName());
 		return pdu;
 	}
 }
