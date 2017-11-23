@@ -61,7 +61,7 @@ public class AdvancedChatServerImpl extends SimpleChatServerImpl {
                         log.debug("Neuer Verbindungsaufbauwunsch empfangen");
 
                         // Neuen Workerthread starten
-                        executorService.submit(new SimpleChatWorkerThreadImpl(connection, clients,
+                        executorService.submit(new AdvancedChatWorkerThreadImpl(connection, clients,
                                 counter, serverGuiInterface));
                     } catch (Exception e) {
                         if (socket.isClosed()) {

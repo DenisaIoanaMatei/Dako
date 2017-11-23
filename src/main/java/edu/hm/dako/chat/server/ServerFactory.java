@@ -60,16 +60,16 @@ public final class ServerFactory {
 				throw new Exception(e);
 			}
 
-			case TCPAdvancedImplementation:
+		case TCPAdvancedImplementation:
 
-				try {
-					TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
-							receiveBufferSize);
-					return new AdvancedChatServerImpl(Executors.newCachedThreadPool(),
-							getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
-				} catch (Exception e) {
-                    throw new Exception(e);
-				}
+			try {
+				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
+						receiveBufferSize);
+				return new AdvancedChatServerImpl(Executors.newCachedThreadPool(),
+						getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
+			} catch (Exception e) {
+				throw new Exception(e);
+			}
 
 		default:
 			System.out.println("Dezeit nur TCP implementiert!");
