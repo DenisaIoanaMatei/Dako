@@ -10,5 +10,5 @@ public class SystemConstants {
 	// Rot fuer die Darstellung falsch eingegebener Werte
 	public static final String RED_COLOR = "#FF0000";
 	// Türkis fuer normale Eingaben
-	public static final String BLACK_COLOR = "#00000";
+	public static final String BLACK_COLOR = "#000000";
 }
