@@ -23,8 +23,12 @@
               </FXCollections>
           </items>
         <value>
-          <SystemConstants fx:constant="IMPL_TCP_SIMPLE" />
+        <SystemConstants fx:constant="IMPL_TCP_SIMPLE" />
+         <SystemConstants fx:constant="IMPL_TCP_ADVANCED" />
+          
         </value>
+        
+       
       </ComboBox>
     <Separator prefWidth="200.0" />
     <HBox alignment="CENTER" spacing="10.0">
