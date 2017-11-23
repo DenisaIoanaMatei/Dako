@@ -108,17 +108,18 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             log.debug("Laenge der Clientliste: " + clients.size());
             serverGuiInterface.incrNumberOfLoggedInClients();
 
+            // ADVANCED: Event-Warteliste erzeugen
+            clients.createWaitList(receivedPdu.getUserName());
+
             // Login-Event an alle Clients (auch an den gerade aktuell
             // anfragenden) senden
-
-            Vector<String> clientList = clients.getClientNameList();
-            pdu = ChatPDU.createLoginEventPdu(userName, clientList, receivedPdu);
+            pdu = ChatPDU.createLoginEventPdu(userName, receivedPdu);
             sendLoginListUpdateEvent(pdu);
 
             // Login Response senden
-            ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
+            //ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
 
-            try {
+            /*try {
                 clients.getClient(userName).getConnection().send(responsePdu);
             } catch (Exception e) {
                 log.debug("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
@@ -128,7 +129,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             log.debug("Login-Response-PDU an Client " + userName + " gesendet");
 
             // Zustand des Clients aendern
-            clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
+            clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);*/
 
         } else {
             // User bereits angemeldet, Fehlermeldung an Client senden,
@@ -264,6 +265,29 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             }
             log.debug("Aktuelle Laenge der Clientliste: " + clients.size());
         }
+    }
+
+    /**
+     * ADVANCED: ChatMessageEvent bestaetigen
+     *
+     * @param receivedPdu
+     *          . Empfangene PDU
+     */
+    protected void chatMessageConfirmAction(ChatPDU receivedPdu ) {
+
+        // Empfangene Confirms hochzaehlen
+        clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
+        confirmCounter.getAndIncrement();
+
+        log.debug("Chat-Message-Confirm-PDU von " + receivedPdu.getUserName()
+                + " fuer vom Client " + receivedPdu.getEventUserName() + " empfangen");
+
+        log.debug(userName + ": ConfirmCounter fuer ChatMessage erhoeht = "
+                + confirmCounter.get() + ", Aktueller EventCounter = " + eventCounter.get()
+                + ", Anzahl gesendeter ChatMessages von dem Client = "
+                + receivedPdu.getSequenceNumber());
+
+
     }
 
     /**
@@ -441,6 +465,12 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
                     // Logout-Request vom Client empfangen
                     logoutRequestAction(receivedPdu);
                     break;
+
+                case MESSAGE_CONFIRM:
+                    // Message-Confirm vom Client empfangen
+                    chatMessageConfirmAction(receivedPdu);
+                    break;
+
 
                 default:
                     log.debug("Falsche PDU empfangen von Client: " + receivedPdu.getUserName()

@@ -294,8 +294,7 @@ public class ChatPDU implements Serializable {
 	 *          Empfangene PDU (Login-Request-PDU)
 	 * @return Erzeugte PDU
 	 */
-	public static ChatPDU createLoginEventPdu(String userName, Vector<String> clientList,
-			ChatPDU receivedPdu) {
+	public static ChatPDU createLoginEventPdu(String userName, ChatPDU receivedPdu) {
 
 		ChatPDU pdu = new ChatPDU();
 		pdu.setPduType(PduType.LOGIN_EVENT);
@@ -304,7 +303,6 @@ public class ChatPDU implements Serializable {
 		pdu.setUserName(userName);
 		pdu.setEventUserName(receivedPdu.getUserName());
 		pdu.setUserName(receivedPdu.getUserName());
-		pdu.setClients(clientList);
 		pdu.setClientStatus(ClientConversationStatus.REGISTERING);
 		return pdu;
 	}

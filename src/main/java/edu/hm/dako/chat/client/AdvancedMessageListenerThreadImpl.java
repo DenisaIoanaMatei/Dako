@@ -151,7 +151,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         log.debug("MessageEventCounter: " + events);
         log.debug("ConfirmCounter: " + sharedClientData.confirmCounter.get());
 
-        // ADVANCED_CHAT:Chat-Message-Event bestaetigen
+        // ADVANCED:Chat-Message-Event bestaetigen
         confirmChatMessageEvent(receivedPdu);
 
         // Empfangene Chat-Nachricht an User Interface zur

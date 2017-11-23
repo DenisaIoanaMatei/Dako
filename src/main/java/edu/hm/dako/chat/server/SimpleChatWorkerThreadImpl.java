@@ -112,8 +112,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 			// Login-Event an alle Clients (auch an den gerade aktuell
 			// anfragenden) senden
 
-			Vector<String> clientList = clients.getClientNameList();
-			pdu = ChatPDU.createLoginEventPdu(userName, clientList, receivedPdu);
+			pdu = ChatPDU.createLoginEventPdu(userName, receivedPdu);
 			sendLoginListUpdateEvent(pdu);
 
 			// Login Response senden
