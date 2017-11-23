@@ -11,13 +11,10 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Mandl
  */
 
+import edu.hm.dako.chat.client.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import edu.hm.dako.chat.client.AbstractChatClient;
-import edu.hm.dako.chat.client.ClientImpl;
-import edu.hm.dako.chat.client.ClientUserInterface;
-import edu.hm.dako.chat.client.SimpleMessageListenerThreadImpl;
 import edu.hm.dako.chat.common.ClientConversationStatus;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.common.ImplementationType;
@@ -132,6 +129,15 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 				ExceptionHandler.logException(e);
 			}
 			break;
+
+		case TCPAdvancedImplementation:
+			try {
+				messageListenerThread = new AdvancedMessageListenerThreadImpl(this, connection,
+						sharedClientData);
+				messageListenerThread.start();
+			} catch (Exception e) {
+				ExceptionHandler.logException(e);
+			}
 
 		default:
 			break;
@@ -348,8 +354,8 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 	/**
 	 * Nacharbeit nach Logout
 	 *
-	 * @param receivedPdu
-	 *          letzte empfangene PDU
+	 //* @param receivedPdu
+     *          letzte empfangene PDU
 	 */
 	private void postLogout() {
 

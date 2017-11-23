@@ -27,6 +27,7 @@ public final class BenchmarkingClientFactory {
 			switch (param.getImplementationType()) {
 
 			case TCPSimpleImplementation:
+			case TCPAdvancedImplementation:
 
 				BenchmarkingClientImpl impl = new BenchmarkingClientImpl(userInterface,
 						benchmarkingGui, param.getImplementationType(), param.getRemoteServerPort(),

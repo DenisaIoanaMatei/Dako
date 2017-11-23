@@ -84,7 +84,7 @@ public class BenchmarkingClientGuiFx2 extends Application
 
 	// Auswahl fuer Comboboxen
 	ObservableList<String> implTypeOptions = FXCollections.observableArrayList(
-			SystemConstants.IMPL_TCP_SIMPLE);
+			SystemConstants.IMPL_TCP_SIMPLE, SystemConstants.IMPL_TCP_ADVANCED);
 	ObservableList<String> measureTypeOptions = FXCollections
 			.observableArrayList("Variable Threads", "Variable Length");
 

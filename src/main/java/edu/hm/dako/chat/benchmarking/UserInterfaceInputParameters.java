@@ -64,6 +64,10 @@ public class UserInterfaceInputParameters {
 			returnString = "TCPSimple-Implementation";
 			break;
 
+		case TCPAdvancedImplementation:
+			returnString = "TCPAdvanced-Implementation";
+			break;
+
 		default:
 			break;
 		}
