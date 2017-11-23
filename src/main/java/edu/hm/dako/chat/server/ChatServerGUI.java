@@ -480,7 +480,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 				serverPortLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
 			} else {
 				System.out.println("Serverport: " + iServerPort);
-				serverPortLabel.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
+				serverPortLabel.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
 			}
 		} else {
 			startable = false;
@@ -505,7 +505,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 				startable = false;
 				sendBufferSizeLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
 			} else {
-				sendBufferSizeLabel.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
+				sendBufferSizeLabel.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
 
 			}
 		} else {
@@ -530,7 +530,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 				startable = false;
 				receiveBufferSizeLabel.setTextFill(Color.web(SystemConstants.RED_COLOR));
 			} else {
-				receiveBufferSizeLabel.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
+				receiveBufferSizeLabel.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
 			}
 		} else {
 			startable = false;

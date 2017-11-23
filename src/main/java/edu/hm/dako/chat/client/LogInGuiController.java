@@ -89,7 +89,7 @@ public class LogInGuiController implements Initializable {
 			return;
 		}
 		// IP-Adresse ist korrekt
-		lblIP.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
+		lblIP.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
 
 		// Serverport pruefen
 
@@ -105,7 +105,7 @@ public class LogInGuiController implements Initializable {
 				return;
 			} else {
 				// Serverport ist korrekt
-				lblServerPort.setTextFill(Color.web(SystemConstants.TURQUOISE_COLOR));
+				lblServerPort.setTextFill(Color.web(SystemConstants.BLACK_COLOR));
 			}
 		} else {
 			appController.setErrorMessage("Chat-Client", "Serverport ist nicht numerisch!", 3);

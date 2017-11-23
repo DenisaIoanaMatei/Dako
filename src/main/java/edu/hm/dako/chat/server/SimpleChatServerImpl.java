@@ -106,21 +106,15 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 				ExceptionHandler.logException(e);
 			}
 		}
-		deleteUserList();
-
-
-	}
-
-	protected void deleteUserList() throws Exception {
-
 		// Loeschen der Userliste
-		clients.deleteAll();
-		Thread.currentThread().interrupt();
-		socket.close();
-		log.debug("Listen-Socket geschlossen");
-		executorService.shutdown();
-		log.debug("Threadpool freigegeben");
+				clients.deleteAll();
+				Thread.currentThread().interrupt();
+				socket.close();
+				log.debug("Listen-Socket geschlossen");
+				executorService.shutdown();
+				log.debug("Threadpool freigegeben");
 
-		System.out.println("SimpleChatServer beendet sich");
+				System.out.println("SimpleChatServer beendet sich");
+
 	}
 }

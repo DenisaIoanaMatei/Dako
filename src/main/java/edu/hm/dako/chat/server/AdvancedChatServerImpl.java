@@ -1,5 +1,6 @@
 package edu.hm.dako.chat.server;
 
+import edu.hm.dako.chat.common.ClientListEntry;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.connection.Connection;
 import edu.hm.dako.chat.connection.ServerSocketInterface;
@@ -7,6 +8,7 @@ import javafx.concurrent.Task;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -81,8 +83,23 @@ public class AdvancedChatServerImpl extends SimpleChatServerImpl {
     }
 
     @Override
-    protected void deleteUserList() throws Exception {
+    public void stop() throws Exception {
 
+        // Alle Verbindungen zu aktiven Clients abbauen
+        Vector<String> sendList = clients.getClientNameList();
+        for (String s : new Vector<String>(sendList)) {
+            ClientListEntry client = clients.getClient(s);
+            try {
+                if (client != null) {
+                    client.getConnection().close();
+                    log.error("Verbindung zu Client " + client.getUserName() + " geschlossen");
+                }
+            } catch (Exception e) {
+                log.debug(
+                        "Fehler beim Schliessen der Verbindung zu Client " + client.getUserName());
+                ExceptionHandler.logException(e);
+            }
+        }
         // Loeschen der Userliste
         clients.deleteAll();
         Thread.currentThread().interrupt();
@@ -92,5 +109,6 @@ public class AdvancedChatServerImpl extends SimpleChatServerImpl {
         log.debug("Threadpool freigegeben");
 
         System.out.println("AdvancedChatServer beendet sich");
+
     }
 }
