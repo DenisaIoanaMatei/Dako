@@ -42,8 +42,7 @@ public class AdvancedMessageListenerThreadImpl extends SimpleMessageListenerThre
 
         // Empfangene Chat-Nachricht an User Interface zur
         // Darstellung uebergeben
-        userInterface.setMessageLine(receivedPdu.getEventUserName(),
-                (String) receivedPdu.getMessage());
+        userInterface.setMessageLine(receivedPdu.getEventUserName(), receivedPdu.getMessage());
     }
 
     /**
@@ -59,8 +58,8 @@ public class AdvancedMessageListenerThreadImpl extends SimpleMessageListenerThre
 
         try {
             connection.send(responsePdu);
-            log.debug("Chat-Message-Event-Confirm-PDU fuer " + receivedPdu.getUserName()
-                    + " bzgl. eines urspruenglichen Events von " + receivedPdu.getEventUserName()
+            log.debug("Message-Confirm-PDU fuer " + receivedPdu.getUserName()
+                    + " das urspruengliche Event von " + receivedPdu.getEventUserName()
                     + " an den Server gesendet");
         } catch (Exception e) {
             ExceptionHandler.logException(e);
