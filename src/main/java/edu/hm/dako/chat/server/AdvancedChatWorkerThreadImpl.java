@@ -117,9 +117,9 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             sendLoginListUpdateEvent(pdu);
 
             // Login Response senden
-            //ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
+            ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
 
-            /*try {
+            try {
                 clients.getClient(userName).getConnection().send(responsePdu);
             } catch (Exception e) {
                 log.debug("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
@@ -129,7 +129,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             log.debug("Login-Response-PDU an Client " + userName + " gesendet");
 
             // Zustand des Clients aendern
-            clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);*/
+            clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
 
         } else {
             // User bereits angemeldet, Fehlermeldung an Client senden,
