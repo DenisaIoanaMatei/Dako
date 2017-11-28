@@ -142,14 +142,14 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         log.debug(
                 "Chat-Message-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
 
-        // Eventzaehler und Confirmzaehler (ADVANCED) fuer Testzwecke erhoehen
+        // Eventzaehler fuer Testzwecke erhoehen
         sharedClientData.eventCounter.getAndIncrement();
 
         int events = SharedClientData.messageEvents.incrementAndGet();
 
         log.debug("MessageEventCounter: " + events);
 
-        // ADVANCED:Chat-Message-Event bestaetigen
+        // ADVANCED:Chat-Message-Event bestaetigen + Confirm-Counter erhöhen
         confirmChatMessageEvent(receivedPdu);
         sharedClientData.messageConfirmCounter.getAndIncrement();
         log.debug("MessageConfirmCounter: " + sharedClientData.messageConfirmCounter.get());
