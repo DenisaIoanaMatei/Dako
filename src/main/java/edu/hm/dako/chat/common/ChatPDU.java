@@ -480,4 +480,48 @@ public class ChatPDU implements Serializable {
 		pdu.setEventUserName(receivedPdu.getEventUserName());
 		return pdu;
 	}
+
+	/**
+	 * Erzeugen einer Login-Confirm-PDU
+	 *
+	 * @param userName
+	 *          Name des Clients
+	 * @param receivedPdu
+	 *          Empfangene PDU
+	 * @return Erzeugte PDU
+	 */
+	public static ChatPDU createLoginConfirm(String userName,
+											   ChatPDU receivedPdu) {
+
+		ChatPDU pdu = new ChatPDU();
+		pdu.setPduType(PduType.LOGIN_CONFIRM);
+		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
+		pdu.setClientThreadName(Thread.currentThread().getName());
+		pdu.setServerThreadName(receivedPdu.getServerThreadName());
+		pdu.setUserName(userName);
+		pdu.setEventUserName(receivedPdu.getEventUserName());
+		return pdu;
+	}
+
+	/**
+	 * Erzeugen einer Logout-Confirm-PDU
+	 *
+	 * @param userName
+	 *          Name des Clients
+	 * @param receivedPdu
+	 *          Empfangene PDU
+	 * @return Erzeugte PDU
+	 */
+	public static ChatPDU createLogoutConfirm(String userName,
+											 ChatPDU receivedPdu) {
+
+		ChatPDU pdu = new ChatPDU();
+		pdu.setPduType(PduType.LOGOUT_CONFIRM);
+		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
+		pdu.setClientThreadName(Thread.currentThread().getName());
+		pdu.setServerThreadName(receivedPdu.getServerThreadName());
+		pdu.setUserName(userName);
+		pdu.setEventUserName(receivedPdu.getEventUserName());
+		return pdu;
+	}
 }
