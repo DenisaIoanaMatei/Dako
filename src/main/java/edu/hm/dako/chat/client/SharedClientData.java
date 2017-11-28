@@ -27,6 +27,7 @@ public class SharedClientData {
 	public AtomicInteger logoutCounter;
 	public AtomicInteger eventCounter;
 	public AtomicInteger confirmCounter;
+	public AtomicInteger messageConfirmCounter;
 
 	// Zaehler fuer die Envents aller Clients fuer
 	// Testausgaben
