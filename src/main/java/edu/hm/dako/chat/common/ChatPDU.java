@@ -126,7 +126,7 @@ public class ChatPDU implements Serializable {
 	}
 
 	public static void printPdu(ChatPDU pdu) {
-		// System.out.println(pdu);
+		System.out.println(pdu);
 		log.debug(pdu);
 	}
 
