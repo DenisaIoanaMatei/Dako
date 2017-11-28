@@ -19,9 +19,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Nisi
  */
 
-public class AdvancedChatServerImpl extends SimpleChatServerImpl {
+public class AdvancedChatServerImpl extends AbstractChatServer {
 
     private static Log log = LogFactory.getLog(AdvancedChatServerImpl.class);
+
+    // Threadpool fuer Worker-Threads
+    protected final ExecutorService executorService;
+
+    // Socket fuer den Listener, der alle Verbindungsaufbauwuensche der Clients
+    // entgegennimmt
+    protected ServerSocketInterface socket;
 
     /**
      * Konstruktor
@@ -31,16 +38,17 @@ public class AdvancedChatServerImpl extends SimpleChatServerImpl {
      * @param serverGuiInterface
      */
     public AdvancedChatServerImpl(ExecutorService executorService,
-                                  ServerSocketInterface socket,
-                                  ChatServerGuiInterface serverGuiInterface) {
-        super(executorService, socket, serverGuiInterface);
+                                  ServerSocketInterface socket, ChatServerGuiInterface serverGuiInterface) {
 
+        log.debug("AdvancedChatServerImpl konstruiert");
+
+        this.executorService = executorService;
+        this.socket = socket;
+        this.serverGuiInterface = serverGuiInterface;
         counter = new SharedServerCounter();
         counter.logoutCounter = new AtomicInteger(0);
         counter.eventCounter = new AtomicInteger(0);
         counter.confirmCounter = new AtomicInteger(0);
-
-        log.debug("AdvancedChatServerImpl konstruiert");
     }
 
     @Override
