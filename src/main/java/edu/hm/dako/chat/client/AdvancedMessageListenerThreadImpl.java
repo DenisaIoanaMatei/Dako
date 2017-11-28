@@ -26,7 +26,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
     @Override
     protected void loginResponseAction(ChatPDU receivedPdu) {
 
-        if (receivedPdu.getErrorCode() == ChatPDU.LOGIN_ERROR) {
+        if(receivedPdu.getErrorCode() == ChatPDU.LOGIN_ERROR) {
 
             // Login hat nicht funktioniert
             log.error("Login-Response-PDU fuer Client " + receivedPdu.getUserName()
