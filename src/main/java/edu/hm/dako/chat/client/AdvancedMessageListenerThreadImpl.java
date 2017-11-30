@@ -145,15 +145,10 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         // Eventzaehler fuer Testzwecke erhoehen
         sharedClientData.eventCounter.getAndIncrement();
 
-        int events = SharedClientData.messageEvents.incrementAndGet();
-
-        log.debug("MessageEventCounter: " + events);
+        log.debug("MessageEventCounter: " + SharedClientData.messageEvents.incrementAndGet());
 
         // ADVANCED:Chat-Message-Event bestaetigen + Confirm-Counter erhöhen
-        confirmChatMessageEvent(receivedPdu);
-        sharedClientData.messageConfirmCounter.getAndIncrement();
-        log.debug("MessageConfirmCounter: " + sharedClientData.messageConfirmCounter.get());
-
+        confirmMessageEvent(receivedPdu);
 
         // Empfangene Chat-Nachricht an User Interface zur
         // Darstellung uebergeben
@@ -167,14 +162,14 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
      *          Empfangene Chat-Event-Message-PDU
      * @throws Exception
      */
-    private void confirmChatMessageEvent(ChatPDU receivedPdu) {
+    private void confirmMessageEvent(ChatPDU receivedPdu) {
         ChatPDU responsePdu = ChatPDU.createMessageConfirm(sharedClientData.userName,
                 receivedPdu);
         String test = receivedPdu.toString();
         try {
             connection.send(responsePdu);
             log.debug("Message-Confirm-PDU fuer " + receivedPdu.getUserName()
-                    + " das urspruengliche Event von " + receivedPdu.getEventUserName()
+                    + " für das urspruengliche Event von " + receivedPdu.getEventUserName()
                     + " an den Server gesendet" + "\n" + test);
         } catch (Exception e) {
             ExceptionHandler.logException(e);

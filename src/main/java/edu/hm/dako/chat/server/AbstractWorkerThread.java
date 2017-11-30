@@ -36,6 +36,7 @@ public abstract class AbstractWorkerThread extends Thread {
 	protected AtomicInteger logoutCounter;
 	protected AtomicInteger eventCounter;
 	protected AtomicInteger confirmCounter;
+	protected AtomicInteger messageConfirmCounter;
 
 	protected ChatServerGuiInterface serverGuiInterface;
 

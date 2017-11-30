@@ -202,17 +202,23 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
     @Override
     protected void chatMessageRequestAction(ChatPDU receivedPdu) {
 
+        //muss nicht erstellt werden...stattdessen ein LOG
         ClientListEntry client = null;
         clients.setRequestStartTime(receivedPdu.getUserName(), startTime);
         clients.incrNumberOfReceivedChatMessages(receivedPdu.getUserName());
+
+        //das bleibt bestehen
         serverGuiInterface.incrNumberOfRequests();
+
+        //kommt nach oben
         log.debug("Chat-Message-Request-PDU von " + receivedPdu.getUserName()
                 + " mit Sequenznummer " + receivedPdu.getSequenceNumber() + " empfangen");
 
+        //bleibt bestehen
         if (!clients.existsClient(receivedPdu.getUserName())) {
             log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
         } else {
-            // Liste der betroffenen Clients ermitteln
+            // Liste der betroffenen Clients ermitteln…hier kommt die Warteliste rein
             Vector<String> sendList = clients.getClientNameList();
             ChatPDU pdu = ChatPDU.createChatMessageEventPdu(userName, receivedPdu);
 
@@ -239,6 +245,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
                 }
             }
 
+            //das hier kommt in die neue Methode der MessageConfirm rein
             client = clients.getClient(receivedPdu.getUserName());
             if (client != null) {
                 ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(
@@ -273,21 +280,21 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
      * @param receivedPdu
      *          . Empfangene PDU
      */
-    protected void chatMessageConfirmAction(ChatPDU receivedPdu ) {
+    protected void messageConfirmAction( ChatPDU receivedPdu ) {
 
         // Empfangene Confirms hochzaehlen
         clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
-        confirmCounter.getAndIncrement();
+        messageConfirmCounter.getAndIncrement();
 
-        log.debug("Chat-Message-Confirm-PDU von " + receivedPdu.getUserName()
-                + " fuer vom Client " + receivedPdu.getEventUserName() + " empfangen");
+        log.debug("Message-Confirm-PDU von " + receivedPdu.getUserName()
+                + " fuer die Nachricht vom Client " + receivedPdu.getEventUserName() + " empfangen");
 
-        log.debug(userName + ": ConfirmCounter fuer ChatMessage erhoeht = "
-                + confirmCounter.get() + ", Aktueller EventCounter = " + eventCounter.get()
+        log.debug(userName + ": MessageConfirmCounter fuer ChatMessage erhoeht = "
+                + messageConfirmCounter.get() + ", Aktueller EventCounter = " + eventCounter.get()
                 + ", Anzahl gesendeter ChatMessages von dem Client = "
                 + receivedPdu.getSequenceNumber());
 
-
+        //hier kommt die Methode zum senden der response rein…eventuell noch den Confirm-Counter zurücksetzen, falls nötig
     }
 
     /**
@@ -468,7 +475,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
                 case MESSAGE_CONFIRM:
                     // Message-Confirm vom Client empfangen
-                    chatMessageConfirmAction(receivedPdu);
+                    messageConfirmAction(receivedPdu);
                     break;
 
 
