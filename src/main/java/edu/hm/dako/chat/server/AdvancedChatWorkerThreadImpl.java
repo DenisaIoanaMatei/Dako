@@ -284,13 +284,13 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
         // Empfangene Confirms hochzaehlen
         clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
-        messageConfirmCounter.getAndIncrement();
+        confirmCounter.getAndIncrement();
 
         log.debug("Message-Confirm-PDU von " + receivedPdu.getUserName()
                 + " fuer die Nachricht vom Client " + receivedPdu.getEventUserName() + " empfangen");
 
-        log.debug(userName + ": MessageConfirmCounter fuer ChatMessage erhoeht = "
-                + messageConfirmCounter.get() + ", Aktueller EventCounter = " + eventCounter.get()
+        log.debug(userName + ": ConfirmCounter fuer ChatMessage erhoeht = "
+                + confirmCounter.get() + ", Aktueller EventCounter = " + eventCounter.get()
                 + ", Anzahl gesendeter ChatMessages von dem Client = "
                 + receivedPdu.getSequenceNumber());
 
