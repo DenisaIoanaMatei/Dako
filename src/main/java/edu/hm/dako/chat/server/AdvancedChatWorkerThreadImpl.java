@@ -108,25 +108,17 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             log.debug("Laenge der Clientliste: " + clients.size());
             serverGuiInterface.incrNumberOfLoggedInClients();
 
-            // ADVANCED: Event-Warteliste erzeugen
-            clients.createWaitList(receivedPdu.getUserName());
-
             // Login-Event an alle Clients (auch an den gerade aktuell
             // anfragenden) senden
+
             pdu = ChatPDU.createLoginEventPdu(userName, receivedPdu);
             sendLoginListUpdateEvent(pdu);
 
+            // ADVANCED: Warteliste für Event erzeugen
+            clients.createWaitList(receivedPdu.getUserName());
+
             // Login Response senden
             ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
-
-            try {
-                clients.getClient(userName).getConnection().send(responsePdu);
-            } catch (Exception e) {
-                log.debug("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
-                log.debug("Exception Message: " + e.getMessage());
-            }
-
-            log.debug("Login-Response-PDU an Client " + userName + " gesendet");
 
             // Zustand des Clients aendern
             clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
@@ -214,7 +206,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
         } else {
 
-            // ADVANCED: Event-Warteliste erzeugen
+            // ADVANCED: Warteliste für Event erzeugen
             clients.createWaitList(receivedPdu.getUserName());
 
             // Initiiator ermitteln
@@ -301,6 +293,63 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             }
         } catch (Exception e) {
             ExceptionHandler.logException(e);
+        }
+    }
+
+    /**
+     * ADVANCED_CHAT: LoginEvent bestaetigen
+     *
+     * @param receivedPdu
+     *          . Empfangene PDU
+     */
+    private void loginEventConfirmAction(ChatPDU receivedPdu) throws Exception {
+
+        // Empfangene Confirms hochzaehlen
+        clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
+        confirmCounter.getAndIncrement();
+
+        String eventUserName = receivedPdu.getEventUserName();
+        String userName = receivedPdu.getUserName();
+
+        log.debug("Login-Confirm-PDU von Client " + userName
+                + " fuer die Nachricht vom Client " + eventUserName+ " empfangen");
+
+        try {
+            clients.deleteWaitListEntry(eventUserName, userName);
+            log.debug(userName + " aus der Warteliste von " + eventUserName
+                    + " ausgetragen");
+
+            if (clients.getClient(eventUserName)
+                    .getStatus() == ClientConversationStatus.REGISTERING) {
+
+                // Der initiierende Client ist im Login-Vorgang
+                if (clients.getWaitListSize(eventUserName) == 0) {
+
+                    ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(eventUserName,
+                            receivedPdu);
+
+                    try {
+                        clients.getClient(eventUserName).getConnection().send(responsePdu);
+                    } catch (Exception e) {
+                        log.debug("Senden einer Login-Response-PDU an " + eventUserName
+                                + " fehlgeschlagen");
+                        log.debug("Exception Message: " + e.getMessage());
+                        throw e;
+                    }
+
+                    log.debug("Login-Response-PDU an Client " + eventUserName + " gesendet");
+                    clients.changeClientStatus(eventUserName,
+                            ClientConversationStatus.REGISTERED);
+
+                } else {
+                    log.debug("Warteliste von " + eventUserName + " enthaelt noch "
+                            + clients.getWaitListSize(eventUserName) + " Einträge");
+                }
+            }
+
+        } catch (Exception e) {
+            log.debug("Login-Event-Confirm-PDU fuer nicht vorhandenen Client erhalten: "
+                    + eventUserName);
         }
     }
 
@@ -485,6 +534,14 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
                     messageConfirmAction(receivedPdu);
                     break;
 
+                case LOGIN_CONFIRM:
+                    // Bestaetigung eines Login-Events angekommen
+                    try {
+                        loginEventConfirmAction(receivedPdu);
+                    } catch (Exception e) {
+                        ExceptionHandler.logException(e);
+                    }
+                    break;
 
                 default:
                     log.debug("Falsche PDU empfangen von Client: " + receivedPdu.getUserName()
