@@ -477,6 +477,7 @@ public class ChatPDU implements Serializable {
 		pdu.setServerThreadName(receivedPdu.getServerThreadName());
 		pdu.setUserName(userName);
 		pdu.setEventUserName(receivedPdu.getEventUserName());
+		pdu.setMessage(receivedPdu.getMessage());
 		return pdu;
 	}
 
