@@ -178,6 +178,8 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
         for (int i = getModel().chats.size()-1; i >= 0 ; i--) {
             if (getModel().chats.get(i).toString().equals("*" + getModel().getUserName() + "*: " + message)) {
                 getModel().chats.set(i, getModel().chats.get(i) + "\t\u2714");
+            } else {
+                log.debug("Nichts gefunden…");
             }
         }
     }
