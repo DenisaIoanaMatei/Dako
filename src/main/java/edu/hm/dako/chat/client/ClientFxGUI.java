@@ -174,15 +174,19 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 		});
 	}
 
-    @Override
+	@Override
     public void setSpecificLineAsMarked (String message) {
-        for (int i = getModel().chats.size()-1; i >= 0 ; i--) {
-            if (getModel().chats.get(i).toString().equals("*" + getModel().getUserName() + "*: " + message)) {
-                getModel().chats.set(i, getModel().chats.get(i) + "\t\u2714");
-            } else {
-                System.out.println("Nichts gefunden...");
-            }
-        }
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				for (int i = getModel().chats.size()-1; i >= 0 ; i--) {
+		        	if (getModel().chats.get(i).toString().equals("*" + getModel().getUserName() + "*: " + message)) {
+		                getModel().chats.set(i, getModel().chats.get(i) + "\t\u2714");
+		                break;
+		            }
+		        }
+			}
+		});
     }
 
 	@Override
