@@ -163,7 +163,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
 			// Event an Client versenden
 			Vector<String> clientList = clients.getClientNameList();
-			pdu = ChatPDU.createLogoutEventPdu(userName, clientList, receivedPdu);
+			pdu = ChatPDU.createLogoutEventPdu(userName, receivedPdu);
 
 			clients.changeClientStatus(receivedPdu.getUserName(),
 					ClientConversationStatus.UNREGISTERING);

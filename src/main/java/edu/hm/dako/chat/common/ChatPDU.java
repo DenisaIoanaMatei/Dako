@@ -269,7 +269,7 @@ public class ChatPDU implements Serializable {
 	 *          Empfangene PDU (Logout-Request-PDU)
 	 * @return Erzeugte PDU
 	 */
-	public static ChatPDU createLogoutEventPdu(String userName, Vector<String> clientList,
+	public static ChatPDU createLogoutEventPdu(String userName,
 			ChatPDU receivedPdu) {
 
 		ChatPDU pdu = new ChatPDU();
@@ -278,7 +278,6 @@ public class ChatPDU implements Serializable {
 		pdu.setEventUserName(userName);
 		pdu.setServerThreadName(Thread.currentThread().getName());
 		pdu.setClientThreadName(receivedPdu.getClientThreadName());
-		pdu.setClients(clientList);
 		pdu.setClientStatus(ClientConversationStatus.UNREGISTERING);
 		return pdu;
 	}

@@ -129,7 +129,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	@Override
 	protected void logoutRequestAction(ChatPDU receivedPdu) {
 
-		ChatPDU pdu;
 		logoutCounter.getAndIncrement();
 		log.debug("Logout-Request von " + receivedPdu.getUserName() + ", LogoutCount = " + logoutCounter.get());
 
@@ -139,9 +138,9 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
 		} else {
 
-			// Event an Client versenden
-			Vector<String> clientList = clients.getClientNameList();
-			pdu = ChatPDU.createLogoutEventPdu(userName, clientList, receivedPdu);
+			// ADVANCED: Warteliste erstellen
+			clients.createWaitList(receivedPdu.getUserName());
+			ChatPDU pdu = ChatPDU.createLogoutEventPdu(userName,receivedPdu);
 
 			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERING);
 			sendLoginListUpdateEvent(pdu);
@@ -162,9 +161,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			}
 
 			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERED);
-
-			// Logout Response senden
-			sendLogoutResponse(receivedPdu.getUserName());
 
 			// Worker-Thread des Clients, der den Logout-Request gesendet
 			// hat, auch gleich zum Beenden markieren
@@ -283,19 +279,19 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	}
 
 	/**
-	 * ADVANCED_CHAT: LoginEvent bestaetigen
+	 * ADVANCED: LoginEvent bestaetigen
 	 *
 	 * @param receivedPdu
 	 *            . Empfangene PDU
 	 */
 	private void loginEventConfirmAction(ChatPDU receivedPdu) throws Exception {
 
+		String eventUserName = receivedPdu.getEventUserName();
+		String userName = receivedPdu.getUserName();
+
 		// Empfangene Confirms hochzaehlen
 		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
 		confirmCounter.getAndIncrement();
-
-		String eventUserName = receivedPdu.getEventUserName();
-		String userName = receivedPdu.getUserName();
 
 		log.debug("Login-Confirm-PDU von Client " + userName + " fuer die Nachricht vom Client " + eventUserName
 				+ " empfangen");
@@ -334,6 +330,55 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	}
 
 	/**
+	 * ADVANCED: LoginEvent bestaetigen
+	 *
+	 * @param receivedPdu
+	 *            . Empfangene PDU
+	 */
+	private void logoutConfirmAction(ChatPDU receivedPdu) throws Exception {
+
+		String eventUserName = receivedPdu.getEventUserName();
+		String userName = receivedPdu.getUserName();
+
+		// Empfangene Confirms hochzaehlen
+		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
+		confirmCounter.getAndIncrement();
+
+		log.debug("Logout-Confirm-PDU von Client " + userName + " fuer die Nachricht vom Client " + eventUserName
+				+ " empfangen");
+
+		try {
+			clients.deleteWaitListEntry(eventUserName, userName);
+			log.debug(userName + " aus der Warteliste von " + eventUserName + " ausgetragen");
+
+			if (clients.getWaitListSize(eventUserName) == 0) {
+
+				try {
+					Thread.sleep(1000);
+				} catch (Exception e) {
+					ExceptionHandler.logException(e);
+				}
+
+				clients.changeClientStatus(receivedPdu.getUserName(),
+						ClientConversationStatus.UNREGISTERED);
+
+				// Worker-Thread des Clients, der den Logout-Request gesendet
+				// hat, auch gleich zum Beenden markieren
+				clients.finish(eventUserName);
+				sendLogoutResponse(eventUserName);
+
+
+			} else {
+				log.debug("Warteliste von " + eventUserName + " enthält noch "
+							+ clients.getWaitListSize(eventUserName) + " Einträge");
+			}
+
+		} catch (Exception e) {
+			log.debug("Logout-Confirm-PDU fuer nicht vorhandenen Client erhalten: " + eventUserName);
+		}
+	}
+
+	/**
 	 * Verbindung zu einem Client ordentlich abbauen
 	 */
 	private void closeConnection() {
@@ -358,6 +403,8 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			// ExceptionHandler.logException(e);
 		}
 	}
+
+
 
 	/**
 	 * Antwort-PDU fuer den initiierenden Client aufbauen und senden
@@ -510,6 +557,11 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				} catch (Exception e) {
 					ExceptionHandler.logException(e);
 				}
+				break;
+
+			case LOGOUT_CONFIRM:
+				// Bestaetigung eines Logout-Events angekommen
+				logoutConfirmAction(receivedPdu);
 				break;
 
 			default:
