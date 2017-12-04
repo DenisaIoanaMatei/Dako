@@ -84,8 +84,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	@Override
 	protected void loginRequestAction(ChatPDU receivedPdu) {
 
-		ChatPDU pdu;
-		log.debug("Login-Request-PDU fuer " + receivedPdu.getUserName() + " empfangen");
+		log.debug("Login-Request-PDU für " + receivedPdu.getUserName() + " empfangen");
 
 		// Neuer Client moechte sich einloggen, Client in Client-Liste
 		// eintragen
@@ -103,31 +102,18 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("Laenge der Clientliste: " + clients.size());
 			serverGuiInterface.incrNumberOfLoggedInClients();
 
+            // ADVANCED: Warteliste für Event erzeugen
+            clients.createWaitList(receivedPdu.getUserName());
+
 			// Login-Event an alle Clients (auch an den gerade aktuell
 			// anfragenden) senden
-
-			pdu = ChatPDU.createLoginEventPdu(userName, receivedPdu);
+			ChatPDU pdu = ChatPDU.createLoginEventPdu(userName, receivedPdu);
 			sendLoginListUpdateEvent(pdu);
-
-			ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
-
-			try {
-				clients.getClient(userName).getConnection().send(responsePdu);
-			} catch (Exception e) {
-				log.debug("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
-				log.debug("Exception Message: " + e.getMessage());
-			}
-
-			// ADVANCED: Warteliste für Event erzeugen
-			clients.createWaitList(receivedPdu.getUserName());
-
-			// Zustand des Clients aendern
-			clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
 
 		} else {
 			// User bereits angemeldet, Fehlermeldung an Client senden,
 			// Fehlercode an Client senden
-			pdu = ChatPDU.createLoginErrorResponsePdu(receivedPdu, ChatPDU.LOGIN_ERROR);
+			ChatPDU pdu = ChatPDU.createLoginErrorResponsePdu(receivedPdu, ChatPDU.LOGIN_ERROR);
 
 			try {
 				connection.send(pdu);
