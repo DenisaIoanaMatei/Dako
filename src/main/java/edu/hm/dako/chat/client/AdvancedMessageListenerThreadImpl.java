@@ -126,6 +126,9 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
             // Naechste Chat-Nachricht darf eingegeben werden
             userInterface.setLock(false);
 
+            // Nachricht in GUI markieren
+            userInterface.setSpecificLineAsMarked(receivedPdu.getMessage());
+
             log.debug(
                     "Chat-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
 

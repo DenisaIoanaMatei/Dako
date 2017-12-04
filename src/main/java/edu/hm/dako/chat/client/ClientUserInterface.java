@@ -27,6 +27,13 @@ public interface ClientUserInterface {
 	 */
 	public void setMessageLine(String sender, String message);
 
+    /**
+     * Markiert eine Zeile in der GUI als gelesen
+     * @author Michi
+     * @param {@link String} Nachricht aus Response PDU
+     */
+    public void setSpecificLineAsMarked(String message);
+
 	/**
 	 * Sperren bzw. Entsperren der Eingabe von Chat-Nachrichten an der GUI
 	 *
