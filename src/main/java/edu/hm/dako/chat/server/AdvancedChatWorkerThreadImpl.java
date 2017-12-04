@@ -117,9 +117,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             // ADVANCED: Warteliste für Event erzeugen
             clients.createWaitList(receivedPdu.getUserName());
 
-            // Login Response senden
-            ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
-
             // Zustand des Clients aendern
             clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
 
@@ -342,7 +339,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
                             ClientConversationStatus.REGISTERED);
 
                 } else {
-                    log.debug("Warteliste von " + eventUserName + " enthaelt noch "
+                    log.debug("Warteliste von " + eventUserName + " enthält noch "
                             + clients.getWaitListSize(eventUserName) + " Einträge");
                 }
             }
