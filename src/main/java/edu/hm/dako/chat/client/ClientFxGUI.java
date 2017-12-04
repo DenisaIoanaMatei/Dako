@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import edu.hm.dako.chat.common.SystemConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.PropertyConfigurator;
@@ -179,7 +180,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
             if (getModel().chats.get(i).toString().equals("*" + getModel().getUserName() + "*: " + message)) {
                 getModel().chats.set(i, getModel().chats.get(i) + "\t\u2714");
             } else {
-                log.debug("Nichts gefunden…");
+                System.out.println("Nichts gefunden...");
             }
         }
     }

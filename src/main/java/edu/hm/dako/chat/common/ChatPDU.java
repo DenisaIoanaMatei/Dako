@@ -471,8 +471,13 @@ public class ChatPDU implements Serializable {
 	public static ChatPDU createMessageConfirm(String userName,
                                                ChatPDU receivedPdu) {
 
-		ChatPDU pdu = receivedPdu;
+		ChatPDU pdu = new ChatPDU();
 		pdu.setPduType(PduType.MESSAGE_CONFIRM);
+		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
+		pdu.setClientThreadName(Thread.currentThread().getName());
+		pdu.setServerThreadName(receivedPdu.getServerThreadName());
+		pdu.setUserName(userName);
+		pdu.setEventUserName(receivedPdu.getEventUserName());
 		return pdu;
 	}
 
