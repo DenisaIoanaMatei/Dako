@@ -107,6 +107,10 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         } catch (Exception e) {
             ExceptionHandler.logException(e);
         }
+
+        // ADVANCED: Bestaetigung senden + ConfirmCounter erhöhen
+        confirmLogoutEvent(receivedPdu);
+        sharedClientData.confirmCounter.getAndIncrement();
     }
 
     @Override
@@ -173,6 +177,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         ChatPDU responsePdu = ChatPDU.createMessageConfirm(sharedClientData.userName,
                 receivedPdu);
         String test = receivedPdu.toString();
+
         try {
             connection.send(responsePdu);
             log.debug("Message-Confirm-PDU fuer " + receivedPdu.getUserName()
@@ -199,6 +204,29 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         try {
             connection.send(responsePdu);
             log.debug("Login-Confirm-PDU fuer " + receivedPdu.getUserName()
+                    + " für das urspruengliche Event von " + receivedPdu.getEventUserName()
+                    + " an den Server gesendet" + "\n" + test);
+        } catch (Exception e) {
+            ExceptionHandler.logException(e);
+        }
+    }
+
+    /**
+     * Bestätigung für Logout-Event-PDU an Server senden (ADVANCED)
+     *
+     * @param receivedPdu
+     *          Empfangene Chat-Event-Message-PDU
+     * @throws Exception
+     */
+    private void confirmLogoutEvent(ChatPDU receivedPdu) {
+
+        ChatPDU responsePdu = ChatPDU.createLogoutConfirm(sharedClientData.userName,
+                receivedPdu);
+        String test = receivedPdu.toString();
+
+        try {
+            connection.send(responsePdu);
+            log.debug("Logout-Confirm-PDU fuer " + receivedPdu.getUserName()
                     + " für das urspruengliche Event von " + receivedPdu.getEventUserName()
                     + " an den Server gesendet" + "\n" + test);
         } catch (Exception e) {

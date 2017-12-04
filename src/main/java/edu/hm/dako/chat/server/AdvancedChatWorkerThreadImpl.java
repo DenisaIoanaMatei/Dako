@@ -154,19 +154,12 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			// In der Advanced-Variante wird noch ein Confirm gesendet, das ist
 			// sicherer.
 
-			try {
+			/*try {
 				Thread.sleep(1000);
 			} catch (Exception e) {
 				ExceptionHandler.logException(e);
-			}
+			}*/
 
-			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERED);
-
-			// Worker-Thread des Clients, der den Logout-Request gesendet
-			// hat, auch gleich zum Beenden markieren
-			clients.finish(receivedPdu.getUserName());
-			log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
-					+ clients.size());
 		}
 	}
 
@@ -356,18 +349,20 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 			if (clients.getWaitListSize(eventUserName) == 0) {
 
-				try {
+				/*try {
 					Thread.sleep(1000);
 				} catch (Exception e) {
 					ExceptionHandler.logException(e);
-				}
+				}*/
 
 				clients.changeClientStatus(receivedPdu.getUserName(),
 						ClientConversationStatus.UNREGISTERED);
 
-				// Worker-Thread des Clients, der den Logout-Request gesendet
-				// hat, auch gleich zum Beenden markieren
-				clients.finish(eventUserName);
+                // Worker-Thread des Clients, der den Logout-Request gesendet
+                // hat, auch gleich zum Beenden markieren
+                clients.finish(eventUserName);
+                log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
+                        + clients.size());
 				sendLogoutResponse(eventUserName);
 
 
