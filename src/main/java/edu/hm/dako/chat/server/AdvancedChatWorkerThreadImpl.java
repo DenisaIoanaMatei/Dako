@@ -252,7 +252,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 				ClientListEntry client = clients.getClient(receivedPdu.getEventUserName());
 				if (client != null) {
-					ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(receivedPdu.getUserName(), 0, 0, 0, 0,
+					ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(receivedPdu.getUserName(), receivedPdu.getMessage(), 0, 0, 0, 0,
 							client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),
 							(System.nanoTime() - client.getStartTime()));
 

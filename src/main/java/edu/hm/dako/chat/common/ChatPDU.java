@@ -409,7 +409,7 @@ public class ChatPDU implements Serializable {
 	 *          Requestbearbeitungszeit im Server
 	 * @return Erzeugte PDU
 	 */
-	public static ChatPDU createChatMessageResponsePdu(String eventInitiator,
+	public static ChatPDU createChatMessageResponsePdu(String eventInitiator, String message,
 			long numberOfSentEvents, long numberOfLostEventConfirms,
 			long numberOfReceivedEventConfirms, long numberOfRetries,
 			long numberOfReceivedChatMessages, String clientThreadName, long serverTime) {
