@@ -235,6 +235,11 @@ public class BenchmarkingClientCoordinator extends Thread
 	}
 
 	@Override
+	// Wird nicht genutzt, nur fuer ChatClientGUI relevant
+	public synchronized void setSpecificLineAsMarked(String message) {
+	}
+
+	@Override
 	// Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
 	public synchronized void setLock(boolean lock) {
 	}
