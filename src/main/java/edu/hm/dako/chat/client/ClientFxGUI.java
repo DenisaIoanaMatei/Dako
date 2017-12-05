@@ -162,7 +162,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	public void setMessageLine(String sender, String message) {
 		String messageText;
 		if (sender.equals(getModel().getUserName())) {
-			messageText = "*" + sender + "*: " + message;
+			messageText = "*" + sender + "*: " + message + "\t\t\u2713";
 		} else {
 			messageText = sender + ": " + message;
 		}
@@ -176,12 +176,13 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	@Override
     public void setSpecificLineAsMarked (String message) {
+		//System.out.println("\n--------------------   DEBUG   --------------------\n\n" + message + "\n\n--------------------   DEBUG   --------------------\n");
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				for (int i = getModel().chats.size()-1; i >= 0 ; i--) {
-		        	if (getModel().chats.get(i).toString().equals("*" + getModel().getUserName() + "*: " + message)) {
-		                getModel().chats.set(i, getModel().chats.get(i) + "\t\u2714");
+		        	if (getModel().chats.get(i).toString().equals("*" + getModel().getUserName() + "*: " + message + "\t\t\u2713")) {
+		                getModel().chats.set(i, getModel().chats.get(i) + "\u2713");
 		                break;
 		            }
 		        }
