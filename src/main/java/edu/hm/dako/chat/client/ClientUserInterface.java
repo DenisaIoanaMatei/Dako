@@ -32,7 +32,7 @@ public interface ClientUserInterface {
      * @author Michi
      * @param {@link String} Nachricht aus Response PDU
      */
-    //public void setSpecificLineAsMarked(String message);
+    public void setSpecificLineAsMarked(String message);
 
 	/**
 	 * Sperren bzw. Entsperren der Eingabe von Chat-Nachrichten an der GUI

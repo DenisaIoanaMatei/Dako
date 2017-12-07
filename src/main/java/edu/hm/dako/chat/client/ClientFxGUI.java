@@ -162,7 +162,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	public void setMessageLine(String sender, String message) {
 		String messageText;
 		if (sender.equals(getModel().getUserName())) {
-			messageText = "*" + sender + "*: " + message; //+ "\t\t\u2713";
+			messageText = "*" + sender + "*: " + message + "\t\t\u2713";
 		} else {
 			messageText = sender + ": " + message;
 		}
@@ -174,7 +174,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 		});
 	}
 
-	/*@Override
+	@Override
     public void setSpecificLineAsMarked (String message) {
 		//System.out.println("\n--------------------   DEBUG   --------------------\n\n" + message + "\n\n--------------------   DEBUG   --------------------\n");
 		Platform.runLater(new Runnable() {
@@ -188,7 +188,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 		        }
 			}
 		});
-    }*/
+    }
 
 	@Override
 	public void setLock(boolean lock) {
