@@ -135,7 +135,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
             userInterface.setLock(false);
 
             // Nachricht in GUI markieren
-            userInterface.setSpecificLineAsMarked(receivedPdu.getMessage());
+            //userInterface.setSpecificLineAsMarked(receivedPdu.getMessage());
 
             log.debug(
                     "Chat-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");

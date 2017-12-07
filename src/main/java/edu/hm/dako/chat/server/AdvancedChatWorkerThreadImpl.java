@@ -355,8 +355,9 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 					ExceptionHandler.logException(e);
 				}*/
 
-				clients.changeClientStatus(receivedPdu.getUserName(),
-						ClientConversationStatus.UNREGISTERED);
+				//ICH GLAUBE HIER IST DER FEHLER
+				// clients.changeClientStatus(receivedPdu.getUserName(),
+						//ClientConversationStatus.UNREGISTERED);
 
                 // Worker-Thread des Clients, der den Logout-Request gesendet
                 // hat, auch gleich zum Beenden markieren

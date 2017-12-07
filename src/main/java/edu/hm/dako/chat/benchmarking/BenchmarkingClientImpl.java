@@ -386,11 +386,11 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 	public void setMessageLine(String sender, String message) {
 	}
 
-	@Override
+	/*@Override
 	//Wird nicht genutzt, nur fuer ClientGui relevant
 	public void setSpecificLineAsMarked(String message) {
 
-	}
+	}*/
 
 	@Override
 	// Wird nicht genutzt, nur fuer ClientGui relevant
