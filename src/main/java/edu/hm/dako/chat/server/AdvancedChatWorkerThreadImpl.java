@@ -349,6 +349,8 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 			if (clients.getWaitListSize(eventUserName) == 0) {
 
+				//Bugfix
+				
 				/*try {
 					Thread.sleep(1000);
 				} catch (Exception e) {
