@@ -168,6 +168,22 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	public void setMessageLine(String sender, String message) {
 		String messageText;
 		if (sender.equals(getModel().getUserName())) {
+			messageText = "*" + sender + "*: " + message;
+		} else {
+			messageText = sender + ": " + message;
+		}
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				getModel().chats.add(messageText);
+			}
+		});
+	}
+	
+	@Override
+	public void setMessageLineAdvanced(String sender, String message) {
+		String messageText;
+		if (sender.equals(getModel().getUserName())) {
 			messageText = "*" + sender + "*: " + message + "\t\t\u2713";
 		} else {
 			messageText = sender + ": " + message;

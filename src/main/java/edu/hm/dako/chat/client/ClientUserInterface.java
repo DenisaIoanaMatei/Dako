@@ -27,6 +27,17 @@ public interface ClientUserInterface {
 	 */
 	public void setMessageLine(String sender, String message);
 
+	/**
+	 * Uebergabe einer Nachricht zur Ausgabe in der Messagezeile 
+	 * mit Markierungen und Erweiterungen aus dem Advanced Chat
+	 *
+	 * @param sender
+	 *          Absender der Nachricht
+	 * @param message
+	 *          Nachrichtentext
+	 */
+	public void setMessageLineAdvanced(String sender, String message);
+	
     /**
      * Markiert eine Zeile in der GUI als gelesen
      * @author Michi

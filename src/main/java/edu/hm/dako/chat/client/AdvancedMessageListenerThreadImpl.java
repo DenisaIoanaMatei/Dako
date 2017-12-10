@@ -153,7 +153,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
 		// Empfangene Chat-Nachricht an User Interface zur
 		// Darstellung uebergeben
-		userInterface.setMessageLine(receivedPdu.getEventUserName(), receivedPdu.getMessage());
+		userInterface.setMessageLineAdvanced(receivedPdu.getEventUserName(), receivedPdu.getMessage());
 	}
 
 	/**
