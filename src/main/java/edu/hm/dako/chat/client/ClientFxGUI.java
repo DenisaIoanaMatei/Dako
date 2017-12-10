@@ -1,5 +1,6 @@
 package edu.hm.dako.chat.client;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+
+// AUDIO
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import java.io.File;
 
 /**
  * Chat-GUI
@@ -165,6 +171,9 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 			messageText = "*" + sender + "*: " + message + "\t\t\u2713";
 		} else {
 			messageText = sender + ": " + message;
+			//play sound
+			MediaPlayer mediaPlayer = new MediaPlayer(new Media(new File("./src/main/java/edu/hm/dako/chat/client/newmessage.mp3").toURI().toString()));
+			mediaPlayer.play();
 		}
 		Platform.runLater(new Runnable() {
 			@Override
