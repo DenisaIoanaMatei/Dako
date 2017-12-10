@@ -271,8 +271,6 @@ public class ClientGUINew extends Application implements ClientUserInterface {
             @Override
             public void handle(ActionEvent event) {
                 performLogin();
-                loginButton.setDisable(true);
-                finishButton.setDisable(false);
             }
         });
     }
@@ -285,9 +283,6 @@ public class ClientGUINew extends Application implements ClientUserInterface {
             @Override
             public void handle(ActionEvent event) {
                 System.exit(0);
-
-                loginButton.setDisable(false);
-                finishButton.setDisable(true);
             }
         });
     }
