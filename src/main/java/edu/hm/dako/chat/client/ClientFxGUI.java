@@ -98,6 +98,11 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	 */
 	public void createNextGui() {
 			try {
+				
+				MediaPlayer mediaPlayer = new MediaPlayer(new Media(new File("./src/main/java/edu/hm/dako/chat/client/loginton.mp3").toURI().toString()));
+				mediaPlayer.play();
+				
+				
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("LoggedInGui.fxml"));
 				Parent root = loader.load();
 				lc2 = loader.getController();
