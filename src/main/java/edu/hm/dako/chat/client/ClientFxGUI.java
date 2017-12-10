@@ -316,4 +316,12 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 		log.debug("Logout-Vorgang ist nun beendet");
 		System.exit(0);
 	}
+
+    @Override
+    public void loginCompleteNew() {
+    }
+
+    @Override
+    public void logoutCompleteNew() {
+    }
 }

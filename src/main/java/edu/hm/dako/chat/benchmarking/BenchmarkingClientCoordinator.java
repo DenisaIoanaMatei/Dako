@@ -234,6 +234,11 @@ public class BenchmarkingClientCoordinator extends Thread
 	public synchronized void setMessageLine(String sender, String message) {
 	}
 
+    @Override
+    // Wird nicht genutzt, nur fuer ChatClientGUI relevant
+    public synchronized void setMessageLineAdvanced(String sender, String message) {
+    }
+
 	@Override
 	// Wird nicht genutzt, nur fuer ChatClientGUI relevant
 	public synchronized void setSpecificLineAsMarked(String message) {
@@ -256,8 +261,18 @@ public class BenchmarkingClientCoordinator extends Thread
 
 	@Override
 	// Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+	public void loginCompleteNew() {
+	}
+
+	@Override
+	// Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
 	public void logoutComplete() {
 	}
+
+    @Override
+    // Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant
+    public void logoutCompleteNew() {
+    }
 
 	@Override
 	// Wird nicht genutzt, nur fuer BenchmarkingClientImpl relevant

@@ -45,7 +45,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 			// Login hat funktioniert
 			sharedClientData.status = ClientConversationStatus.REGISTERED;
 
-			userInterface.loginComplete();
+			userInterface.loginCompleteNew();
 
 			Thread.currentThread().setName("Listener" + "-" + sharedClientData.userName);
 			log.debug("Login-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
@@ -85,7 +85,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 		log.debug("Vom Client gesendete Chat-Nachrichten:  " + sharedClientData.messageCounter.get());
 
 		finished = true;
-		userInterface.logoutComplete();
+		userInterface.logoutCompleteNew();
 	}
 
 	@Override

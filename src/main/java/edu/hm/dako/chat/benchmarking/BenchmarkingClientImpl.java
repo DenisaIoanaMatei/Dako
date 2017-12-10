@@ -387,6 +387,11 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 	}
 
 	@Override
+	// Wird nicht genutzt, nur fuer ClientGui relevant
+	public void setMessageLineAdvanced(String sender, String message) {
+	}
+
+	@Override
 	//Wird nicht genutzt, nur fuer ClientGui relevant
 	public void setSpecificLineAsMarked(String message) {
 
@@ -404,7 +409,17 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
 	@Override
 	// Wird nicht genutzt, nur fuer BenchmarkingClientCoordinator relevant
+	public void loginCompleteNew() {
+	}
+
+	@Override
+	// Wird nicht genutzt, nur fuer BenchmarkingClientCoordinator relevant
 	public void logoutComplete() {
+	}
+
+	@Override
+	// Wird nicht genutzt, nur fuer BenchmarkingClientCoordinator relevant
+	public void logoutCompleteNew() {
 	}
 
 	@Override

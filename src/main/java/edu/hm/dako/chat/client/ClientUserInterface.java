@@ -141,8 +141,18 @@ public interface ClientUserInterface {
 	 */
 	public void loginComplete();
 
+    /**
+     * Login vollstaendig und Chat-GUI kann angezeigt werden
+     */
+    public void loginCompleteNew();
+
 	/**
 	 * Logout vollstaendig durchgefuehrt
 	 */
 	public void logoutComplete();
+
+    /**
+     * Logout vollstaendig durchgefuehrt
+     */
+    public void logoutCompleteNew();
 }
