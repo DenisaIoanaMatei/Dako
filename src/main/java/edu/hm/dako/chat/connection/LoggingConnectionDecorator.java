@@ -31,7 +31,7 @@ public class LoggingConnectionDecorator implements Connection {
     log.debug("Sende Nachricht, Chat-Inhalt: " + pdu.getMessage()
 	  + ", Chat-User: " + pdu.getUserName());
     wrappedConnection.send(message);
-    log.trace(pdu);
+    //log.trace(pdu);
     log.debug("Nachricht gesendet");
   }
 
@@ -42,7 +42,7 @@ public class LoggingConnectionDecorator implements Connection {
     if (pdu != null) {
 	log.debug("Nachricht empfangen, Chat-Inhalt: " + pdu.getMessage()
 	    + ", Chat-User: " + pdu.getUserName());
-	log.trace(pdu);
+	//log.trace(pdu);
     }
     return pdu;
   }
@@ -54,7 +54,7 @@ public class LoggingConnectionDecorator implements Connection {
     if (pdu != null) {
 	log.debug("Nachricht empfangen, Chat-Inhalt: " + pdu.getMessage()
 	    + ", Chat-User: " + pdu.getUserName());
-	log.trace(pdu);
+	//log.trace(pdu);
     }
     return pdu;
   }

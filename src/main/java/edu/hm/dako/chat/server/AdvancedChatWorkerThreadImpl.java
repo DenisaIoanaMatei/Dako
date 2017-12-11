@@ -128,21 +128,21 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 	@Override
 	protected void logoutRequestAction(ChatPDU receivedPdu) {
-
 		logoutCounter.getAndIncrement();
 		log.debug("Logout-Request von " + receivedPdu.getUserName() + ", LogoutCount = " + logoutCounter.get());
 
 		log.debug("Logout-Request-PDU von " + receivedPdu.getUserName() + " empfangen");
 
+		userName = receivedPdu.getUserName();
 		if (!clients.existsClient(userName)) {
-			log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
+			log.debug("User nicht in Clientliste: " + userName);
 		} else {
 
 			// ADVANCED: Warteliste erstellen
-			clients.createWaitList(receivedPdu.getUserName());
+			clients.createWaitList(userName);
 			ChatPDU pdu = ChatPDU.createLogoutEventPdu(userName,receivedPdu);
 
-			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERING);
+			clients.changeClientStatus(userName, ClientConversationStatus.UNREGISTERING);
 			sendLoginListUpdateEvent(pdu);
 			serverGuiInterface.decrNumberOfLoggedInClients();
 
@@ -154,11 +154,11 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			// In der Advanced-Variante wird noch ein Confirm gesendet, das ist
 			// sicherer.
 
-			/*try {
+			try {
 				Thread.sleep(1000);
 			} catch (Exception e) {
 				ExceptionHandler.logException(e);
-			}*/
+			}
 
 		}
 	}
@@ -326,7 +326,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	}
 
 	/**
-	 * ADVANCED: LoginEvent bestaetigen
+	 * ADVANCED: LogoutEvent bestaetigen
 	 *
 	 * @param receivedPdu
 	 *            . Empfangene PDU
@@ -348,18 +348,11 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug(userName + " aus der Warteliste von " + eventUserName + " ausgetragen");
 
 			if (clients.getWaitListSize(eventUserName) == 0) {
-
-				//Bugfix
-				
-				/*try {
+                try {
 					Thread.sleep(1000);
 				} catch (Exception e) {
 					ExceptionHandler.logException(e);
-				}*/
-
-				//ICH GLAUBE HIER IST DER FEHLER
-				// clients.changeClientStatus(receivedPdu.getUserName(),
-						//ClientConversationStatus.UNREGISTERED);
+				}
 
                 // Worker-Thread des Clients, der den Logout-Request gesendet
                 // hat, auch gleich zum Beenden markieren
