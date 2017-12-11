@@ -145,21 +145,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERING);
 			sendLoginListUpdateEvent(pdu);
 			serverGuiInterface.decrNumberOfLoggedInClients();
-
-			// Der Thread muss hier noch warten, bevor ein Logout-Response gesendet
-			// wird, da sich sonst ein Client abmeldet, bevor er seinen letzten Event
-			// empfangen hat. das funktioniert nicht bei einer grossen Anzahl an
-			// Clients (kalkulierte Events stimmen dann nicht mit tatsaechlich
-			// empfangenen Events ueberein.
-			// In der Advanced-Variante wird noch ein Confirm gesendet, das ist
-			// sicherer.
-
-			try {
-				Thread.sleep(1000);
-			} catch (Exception e) {
-				ExceptionHandler.logException(e);
-			}
-
 		}
 	}
 
@@ -348,23 +333,23 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 			if (clients.getWaitListSize(eventUserName) == 0) {
 
-				// Bugfix
-
-				try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
-					ExceptionHandler.logException(e);
-				}
-
-				// ICH GLAUBE HIER IST DER FEHLER
-				// clients.changeClientStatus(receivedPdu.getUserName(),
-				// ClientConversationStatus.UNREGISTERED);
-
 				// Worker-Thread des Clients, der den Logout-Request gesendet
 				// hat, auch gleich zum Beenden markieren
 				clients.finish(eventUserName);
 				log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
 						+ clients.size());
+
+                // Bugfix
+                // Der Thread muss hier noch warten, bevor ein Logout-Response gesendet
+                // wird, da sich sonst ein Client abmeldet, bevor er seinen letzten Event
+                // empfangen hat. Das funktioniert nicht bei einer grossen Anzahl an
+                // Clients (kalkulierte Events stimmen dann nicht mit tatsaechlich
+                // empfangenen Events ueberein.
+				try {
+					Thread.sleep(1000);
+				} catch (Exception e) {
+					ExceptionHandler.logException(e);
+				}
 				sendLogoutResponse(eventUserName);
 
 			} else {
