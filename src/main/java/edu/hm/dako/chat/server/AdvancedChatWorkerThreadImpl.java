@@ -351,7 +351,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				// Bugfix
 
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} catch (Exception e) {
 					ExceptionHandler.logException(e);
 				}
