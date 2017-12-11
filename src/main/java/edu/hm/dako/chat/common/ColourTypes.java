@@ -7,7 +7,7 @@ package edu.hm.dako.chat.common;
  */
 public enum ColourTypes {
     DEFAULT_COLOUR(0,"#99CBBC","T\u00fcrkis"),
-    WHITE_COLOUR(1,"#FFFFFF","Weiß"),
+    WHITE_COLOUR(1,"#FFFFFF","Wei\u00df"),
     GREY_COLOUR(2,"#999999","Grau"),
     GREEN_COLOUR(3,"#97CDA1","Gr\u00fcn"),
     YELLOW_COLOUR(4,"#FEFF99","Gelb"),
@@ -31,7 +31,7 @@ public enum ColourTypes {
     public static String getHexCode( String description ) {
         if (description.equals("T\u00fcrkis")) {
             return "#99CBBC";
-        } else if (description.equals("Weiß")) {
+        } else if (description.equals("Wei\u00df")) {
             return "#FFFFFF";
         } else if (description.equals("Grau")) {
             return "#999999";
