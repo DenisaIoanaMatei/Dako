@@ -47,7 +47,7 @@ public class ClientGUINew extends Application implements ClientUserInterface {
     protected String colourCode;
 
     protected Stage stage;
-    private static LoggedInGuiController lc;
+    private static LoggedInGuiControllerNew lc;
     private ClientImpl communicator;
     private ClientModel model = new ClientModel();
 
@@ -359,7 +359,7 @@ public class ClientGUINew extends Application implements ClientUserInterface {
      */
     public void createNextGui(String colourCode) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("LoggedInGui.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("LoggedInGuiNew.fxml"));
             Parent root = loader.load();
             lc = loader.getController();
             lc.setAppControllerNew(this);
@@ -417,21 +417,6 @@ public class ClientGUINew extends Application implements ClientUserInterface {
         }
     }
 
-    @Override
-    public void setMessageLine( String sender, String message ) {
-        String messageText;
-        if (sender.equals(getModel().getUserName())) {
-            messageText = "*" + sender + "*: " + message + "\t\t\u2713";
-        } else {
-            messageText = sender + ": " + message;
-        }
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                getModel().chats.add(messageText);
-            }
-        });
-    }
 
     @Override
     public void setMessageLineAdvanced(String sender, String message) {
@@ -592,5 +577,9 @@ public class ClientGUINew extends Application implements ClientUserInterface {
 
     @Override
     public void logoutComplete() {
+    }
+
+    @Override
+    public void setMessageLine( String sender, String message ) {
     }
 }

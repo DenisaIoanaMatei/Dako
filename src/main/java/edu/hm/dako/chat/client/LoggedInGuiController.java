@@ -40,8 +40,7 @@ public class LoggedInGuiController {
 	@FXML
 	private ScrollPane chatPane;
 
-	private ClientFxGUI appController;
-	private ClientGUINew appController1;
+	protected ClientFxGUI appController;
 	private Stage stage;
 
 
@@ -79,42 +78,15 @@ public class LoggedInGuiController {
 		btnSubmit.disableProperty().bind(appController.getModel().block);
 	}
 
-	public void setAppControllerNew(ClientGUINew appController) {
-
-		this.appController1 = appController;
-
-		usersList.maxWidthProperty().bind(scrollPane.widthProperty().subtract(2));
-		usersList.minWidthProperty().bind(scrollPane.widthProperty().subtract(2));
-		usersList.maxHeightProperty().bind(scrollPane.heightProperty().subtract(2));
-		usersList.minHeightProperty().bind(scrollPane.heightProperty().subtract(2));
-
-		usersList.setItems(appController.getModel().users);
-		usersList.scrollTo(appController.getModel().users.size());
-
-		chatList.maxWidthProperty().bind(chatPane.widthProperty().subtract(2));
-		chatList.minWidthProperty().bind(chatPane.widthProperty().subtract(2));
-		chatList.maxHeightProperty().bind(chatPane.heightProperty().subtract(2));
-		chatList.minHeightProperty().bind(chatPane.heightProperty().subtract(2));
-
-		chatList.setItems(appController.getModel().chats);
-      /*  chatList.getItems().addListener(new ListChangeListener<String>() {
-            @Override
-            public void onChanged(Change<? extends String> c) {
-              Platform.runLater(() ->  chatList.scrollTo(appController.getModel().users.size()-1) );
-            }
-        });*/
-		btnSubmit.disableProperty().bind(appController.getModel().block);
-	}
-
 	public void btnLogOut_OnAction() {
 		try {
-			appController1.getCommunicator().logout(appController1.getModel().getUserName());
+			appController.getCommunicator().logout(appController.getModel().getUserName());
 		} catch (IOException e) {
 			log.error("Logout konnte nicht durchgefuehrt werden, Server aktiv?");
-			appController1.setErrorMessage("Chat-Client",
+			appController.setErrorMessage("Chat-Client",
 					"Abmelden beim Server nicht erfolgreich, da der Server vermutlich nicht aktiv ist. Sie werden abgemeldet...",
 					5);
-			appController1.switchToLogInGui();
+			appController.switchToLogInGui();
 		}
 
 		// Bei Abschluss des Logout-Vorgangs wird dies ueber die Callback-Methode
@@ -125,22 +97,22 @@ public class LoggedInGuiController {
 	public void btnSubmit_OnAction() {
 		try {
 			// Eingegebene Chat-Nachricht an Server senden
-			appController1.getCommunicator().tell(appController1.getModel().getUserName(),
+			appController.getCommunicator().tell(appController.getModel().getUserName(),
 					txtChatMessage.getText());
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     txtChatMessage.setText("");
-                    chatList.scrollTo(appController1.getModel().chats.size()-1);
+                    chatList.scrollTo(appController.getModel().chats.size()-1);
                 }
             });
 		} catch (IOException e) {
 			// Senden funktioniert nicht, Server vermutlich nicht aktiv
 			log.error("Senden konnte nicht durchgefuehrt werden, Server aktiv?");
-			appController1.setErrorMessage("Chat-Client",
+			appController.setErrorMessage("Chat-Client",
 					"Die Nachricht konnte nicht gesendet werden, da der Server unter Umst\u00e4nden nicht mehr l\u00e4uft. Sie werden abgemeldet...",
 					6);
-			appController1.switchToLogInGui();
+			appController.switchToLogInGui();
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
