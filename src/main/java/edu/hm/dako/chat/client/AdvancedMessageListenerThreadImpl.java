@@ -165,12 +165,11 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	 */
 	private void confirmMessageEvent(ChatPDU receivedPdu) {
 		ChatPDU responsePdu = ChatPDU.createMessageConfirm(sharedClientData.userName, receivedPdu);
-		String test = receivedPdu.toString();
 
 		try {
 			connection.send(responsePdu);
 			log.debug("Message-Confirm-PDU fuer " + receivedPdu.getUserName() + " für das urspruengliche Event von "
-					+ receivedPdu.getEventUserName() + " an den Server gesendet" + "\n" + test);
+					+ receivedPdu.getEventUserName() + " an den Server gesendet");
 		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
@@ -186,12 +185,11 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	private void confirmLoginEvent(ChatPDU receivedPdu) {
 
 		ChatPDU responsePdu = ChatPDU.createLoginConfirm(sharedClientData.userName, receivedPdu);
-		String test = receivedPdu.toString();
 
 		try {
 			connection.send(responsePdu);
 			log.debug("Login-Confirm-PDU fuer " + receivedPdu.getUserName() + " für das urspruengliche Event von "
-					+ receivedPdu.getEventUserName() + " an den Server gesendet" + "\n" + test);
+					+ receivedPdu.getEventUserName() + " an den Server gesendet");
 		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
@@ -207,12 +205,11 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 	private void confirmLogoutEvent(ChatPDU receivedPdu) {
 
 		ChatPDU responsePdu = ChatPDU.createLogoutConfirm(sharedClientData.userName, receivedPdu);
-		String test = receivedPdu.toString();
 
 		try {
 			connection.send(responsePdu);
 			log.debug("Logout-Confirm-PDU fuer " + receivedPdu.getUserName() + " für das urspruengliche Event von "
-					+ receivedPdu.getEventUserName() + " an den Server gesendet" + "\n" + test);
+					+ receivedPdu.getEventUserName() + " an den Server gesendet");
 		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
