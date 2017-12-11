@@ -102,8 +102,8 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("Laenge der Clientliste: " + clients.size());
 			serverGuiInterface.incrNumberOfLoggedInClients();
 
-            // ADVANCED: Warteliste für Event erzeugen
-            clients.createWaitList(receivedPdu.getUserName());
+			// ADVANCED: Warteliste für Event erzeugen
+			clients.createWaitList(receivedPdu.getUserName());
 
 			// Login-Event an alle Clients (auch an den gerade aktuell
 			// anfragenden) senden
@@ -128,21 +128,21 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 	@Override
 	protected void logoutRequestAction(ChatPDU receivedPdu) {
+
 		logoutCounter.getAndIncrement();
 		log.debug("Logout-Request von " + receivedPdu.getUserName() + ", LogoutCount = " + logoutCounter.get());
 
 		log.debug("Logout-Request-PDU von " + receivedPdu.getUserName() + " empfangen");
 
-		userName = receivedPdu.getUserName();
 		if (!clients.existsClient(userName)) {
-			log.debug("User nicht in Clientliste: " + userName);
+			log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
 		} else {
 
 			// ADVANCED: Warteliste erstellen
-			clients.createWaitList(userName);
-			ChatPDU pdu = ChatPDU.createLogoutEventPdu(userName,receivedPdu);
+			clients.createWaitList(receivedPdu.getUserName());
+			ChatPDU pdu = ChatPDU.createLogoutEventPdu(userName, receivedPdu);
 
-			clients.changeClientStatus(userName, ClientConversationStatus.UNREGISTERING);
+			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERING);
 			sendLoginListUpdateEvent(pdu);
 			serverGuiInterface.decrNumberOfLoggedInClients();
 
@@ -248,9 +248,8 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 					ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(receivedPdu.getUserName(),
 							receivedPdu.getMessage(), receivedPdu.getNumberOfSentEvents(),
 							receivedPdu.getNumberOfLostConfirms(), receivedPdu.getNumberOfReceivedConfirms(),
-                            receivedPdu.getNumberOfRetries(),
-							client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),
-							(System.nanoTime() - client.getStartTime()));
+							receivedPdu.getNumberOfRetries(), client.getNumberOfReceivedChatMessages(),
+							receivedPdu.getClientThreadName(), (System.nanoTime() - client.getStartTime()));
 
 					if (responsePdu.getServerTime() / 1000000 > 100) {
 						log.debug(Thread.currentThread().getName()
@@ -326,7 +325,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	}
 
 	/**
-	 * ADVANCED: LogoutEvent bestaetigen
+	 * ADVANCED: LoginEvent bestaetigen
 	 *
 	 * @param receivedPdu
 	 *            . Empfangene PDU
@@ -348,23 +347,29 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug(userName + " aus der Warteliste von " + eventUserName + " ausgetragen");
 
 			if (clients.getWaitListSize(eventUserName) == 0) {
-                try {
-					Thread.sleep(1000);
+
+				// Bugfix
+
+				try {
+					Thread.sleep(2000);
 				} catch (Exception e) {
 					ExceptionHandler.logException(e);
 				}
 
-                // Worker-Thread des Clients, der den Logout-Request gesendet
-                // hat, auch gleich zum Beenden markieren
-                clients.finish(eventUserName);
-                log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
-                        + clients.size());
+				// ICH GLAUBE HIER IST DER FEHLER
+				// clients.changeClientStatus(receivedPdu.getUserName(),
+				// ClientConversationStatus.UNREGISTERED);
+
+				// Worker-Thread des Clients, der den Logout-Request gesendet
+				// hat, auch gleich zum Beenden markieren
+				clients.finish(eventUserName);
+				log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
+						+ clients.size());
 				sendLogoutResponse(eventUserName);
 
-
 			} else {
-				log.debug("Warteliste von " + eventUserName + " enthält noch "
-							+ clients.getWaitListSize(eventUserName) + " Einträge");
+				log.debug("Warteliste von " + eventUserName + " enthält noch " + clients.getWaitListSize(eventUserName)
+						+ " Einträge");
 			}
 
 		} catch (Exception e) {
@@ -397,8 +402,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			// ExceptionHandler.logException(e);
 		}
 	}
-
-
 
 	/**
 	 * Antwort-PDU fuer den initiierenden Client aufbauen und senden
