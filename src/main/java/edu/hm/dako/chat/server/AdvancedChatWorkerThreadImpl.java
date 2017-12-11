@@ -102,8 +102,8 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("Laenge der Clientliste: " + clients.size());
 			serverGuiInterface.incrNumberOfLoggedInClients();
 
-			// ADVANCED: Warteliste für Event erzeugen
-			clients.createWaitList(receivedPdu.getUserName());
+            // ADVANCED: Warteliste für Event erzeugen
+            clients.createWaitList(receivedPdu.getUserName());
 
 			// Login-Event an alle Clients (auch an den gerade aktuell
 			// anfragenden) senden
@@ -140,7 +140,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 			// ADVANCED: Warteliste erstellen
 			clients.createWaitList(receivedPdu.getUserName());
-			ChatPDU pdu = ChatPDU.createLogoutEventPdu(userName, receivedPdu);
+			ChatPDU pdu = ChatPDU.createLogoutEventPdu(userName,receivedPdu);
 
 			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERING);
 			sendLoginListUpdateEvent(pdu);
@@ -233,8 +233,9 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 					ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(receivedPdu.getUserName(),
 							receivedPdu.getMessage(), receivedPdu.getNumberOfSentEvents(),
 							receivedPdu.getNumberOfLostConfirms(), receivedPdu.getNumberOfReceivedConfirms(),
-							receivedPdu.getNumberOfRetries(), client.getNumberOfReceivedChatMessages(),
-							receivedPdu.getClientThreadName(), (System.nanoTime() - client.getStartTime()));
+                            receivedPdu.getNumberOfRetries(),
+							client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),
+							(System.nanoTime() - client.getStartTime()));
 
 					if (responsePdu.getServerTime() / 1000000 > 100) {
 						log.debug(Thread.currentThread().getName()
@@ -333,28 +334,24 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
 			if (clients.getWaitListSize(eventUserName) == 0) {
 
-				// Worker-Thread des Clients, der den Logout-Request gesendet
-				// hat, auch gleich zum Beenden markieren
-				clients.finish(eventUserName);
-				log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
-						+ clients.size());
-
-                // Bugfix
-                // Der Thread muss hier noch warten, bevor ein Logout-Response gesendet
-                // wird, da sich sonst ein Client abmeldet, bevor er seinen letzten Event
-                // empfangen hat. Das funktioniert nicht bei einer grossen Anzahl an
-                // Clients (kalkulierte Events stimmen dann nicht mit tatsaechlich
-                // empfangenen Events ueberein.
+				//Bugfix Sleep-Timer um 500ms erhöht
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(1500);
 				} catch (Exception e) {
 					ExceptionHandler.logException(e);
 				}
+
+                // Worker-Thread des Clients, der den Logout-Request gesendet
+                // hat, auch gleich zum Beenden markieren
+                clients.finish(eventUserName);
+                log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
+                        + clients.size());
 				sendLogoutResponse(eventUserName);
 
+
 			} else {
-				log.debug("Warteliste von " + eventUserName + " enthält noch " + clients.getWaitListSize(eventUserName)
-						+ " Einträge");
+				log.debug("Warteliste von " + eventUserName + " enthält noch "
+							+ clients.getWaitListSize(eventUserName) + " Einträge");
 			}
 
 		} catch (Exception e) {
@@ -387,6 +384,8 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			// ExceptionHandler.logException(e);
 		}
 	}
+
+
 
 	/**
 	 * Antwort-PDU fuer den initiierenden Client aufbauen und senden
