@@ -102,7 +102,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("Laenge der Clientliste: " + clients.size());
 			serverGuiInterface.incrNumberOfLoggedInClients();
 
-            // ADVANCED: Warteliste für Event erzeugen
+            // Warteliste
             clients.createWaitList(receivedPdu.getUserName());
 
 			// Login-Event an alle Clients (auch an den gerade aktuell
@@ -138,7 +138,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
 		} else {
 
-			// Warteliste erstellen
+			// Warteliste
 			clients.createWaitList(receivedPdu.getUserName());
 			ChatPDU pdu = ChatPDU.createLogoutEventPdu(userName,receivedPdu);
 
@@ -146,14 +146,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			sendLoginListUpdateEvent(pdu);
 			serverGuiInterface.decrNumberOfLoggedInClients();
 
-            // Der Thread muss hier noch warten, bevor ein Logout-Response gesendet
-            // wird, da sich sonst ein Client abmeldet, bevor er seinen letzten Event
-            // empfangen hat. das funktioniert nicht bei einer grossen Anzahl an
-            // Clients (kalkulierte Events stimmen dann nicht mit tatsaechlich
-            // empfangenen Events ueberein.
-            // In der Advanced-Variante wird noch ein Confirm gesendet, das ist
-            // sicherer.
-
+			//Sleep-Timer vom Simple
             /*try {
                 Thread.sleep(1000);
             } catch (Exception e) {
