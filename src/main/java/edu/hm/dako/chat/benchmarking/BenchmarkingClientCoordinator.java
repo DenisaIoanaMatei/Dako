@@ -185,7 +185,7 @@ public class BenchmarkingClientCoordinator extends Thread
 		executorService.shutdown();
 
 		try {
-			executorService.awaitTermination(100, TimeUnit.SECONDS);
+			executorService.awaitTermination(20, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			log.error("Das Beenden des ExecutorService wurde unterbrochen");
 			ExceptionHandler.logException(e);
