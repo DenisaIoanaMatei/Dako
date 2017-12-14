@@ -468,15 +468,14 @@ public class ChatPDU implements Serializable {
 	 *          Empfangene PDU
 	 * @return Erzeugte PDU
 	 */
-	public static ChatPDU createMessageConfirm(String userName,
-                                               ChatPDU receivedPdu) {
+	public static ChatPDU createMessageConfirm(ChatPDU receivedPdu) {
 
 		ChatPDU pdu = new ChatPDU();
 		pdu.setPduType(PduType.MESSAGE_CONFIRM);
 		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
 		pdu.setClientThreadName(Thread.currentThread().getName());
 		pdu.setServerThreadName(receivedPdu.getServerThreadName());
-		pdu.setUserName(userName);
+		pdu.setUserName(receivedPdu.getUserName());
 		pdu.setEventUserName(receivedPdu.getEventUserName());
 		pdu.setMessage(receivedPdu.getMessage());
 		return pdu;
@@ -491,15 +490,14 @@ public class ChatPDU implements Serializable {
 	 *          Empfangene PDU
 	 * @return Erzeugte PDU
 	 */
-	public static ChatPDU createLoginConfirm(String userName,
-											   ChatPDU receivedPdu) {
+	public static ChatPDU createLoginConfirm(ChatPDU receivedPdu) {
 
 		ChatPDU pdu = new ChatPDU();
 		pdu.setPduType(PduType.LOGIN_CONFIRM);
 		pdu.setClientStatus(ClientConversationStatus.REGISTERED);
 		pdu.setClientThreadName(Thread.currentThread().getName());
 		pdu.setServerThreadName(receivedPdu.getServerThreadName());
-		pdu.setUserName(userName);
+		pdu.setUserName(receivedPdu.getUserName());
 		pdu.setEventUserName(receivedPdu.getEventUserName());
 		return pdu;
 	}
