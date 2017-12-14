@@ -250,7 +250,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				}
 			}
 		} catch (Exception e) {
-			ExceptionHandler.logException(e);
+            log.debug("Etwas schief gelaufen");
 		}
 	}
 
