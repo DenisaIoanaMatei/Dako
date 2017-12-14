@@ -145,13 +145,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			clients.changeClientStatus(receivedPdu.getUserName(), ClientConversationStatus.UNREGISTERING);
 			sendLoginListUpdateEvent(pdu);
 			serverGuiInterface.decrNumberOfLoggedInClients();
-
-			//Sleep-Timer vom Simple
-            /*try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-                ExceptionHandler.logException(e);
-            }*/
 		}
 	}
 

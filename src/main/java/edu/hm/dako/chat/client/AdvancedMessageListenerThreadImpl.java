@@ -204,8 +204,6 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
 		try {
 			connection.send(responsePdu);
-			log.debug("Logout-Confirm-PDU fuer " + receivedPdu.getUserName() + " für das urspruengliche Event von "
-					+ receivedPdu.getEventUserName() + " an den Server gesendet");
 		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
