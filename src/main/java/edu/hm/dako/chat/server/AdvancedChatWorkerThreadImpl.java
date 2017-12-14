@@ -266,27 +266,24 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			//aus Warteliste löschen
 			clients.deleteWaitListEntry(eventUserName, userName);
 
-			if (clients.getClient(eventUserName).getStatus() == ClientConversationStatus.REGISTERING) {
+            // Der initiierende Client ist im Login-Vorgang
+            if (clients.getWaitListSize(eventUserName) == 0) {
 
-				// Der initiierende Client ist im Login-Vorgang
-				if (clients.getWaitListSize(eventUserName) == 0) {
+                ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(eventUserName, receivedPdu);
 
-					ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(eventUserName, receivedPdu);
+                try {
+                    clients.getClient(eventUserName).getConnection().send(responsePdu);
+                } catch (Exception e) {
+                    log.debug("Senden einer Login-Response-PDU an " + eventUserName + " fehlgeschlagen");
+                    log.debug("Exception Message: " + e.getMessage());
+                    throw e;
+                }
 
-					try {
-						clients.getClient(eventUserName).getConnection().send(responsePdu);
-					} catch (Exception e) {
-						log.debug("Senden einer Login-Response-PDU an " + eventUserName + " fehlgeschlagen");
-						log.debug("Exception Message: " + e.getMessage());
-						throw e;
-					}
+                clients.changeClientStatus(eventUserName, ClientConversationStatus.REGISTERED);
 
-					clients.changeClientStatus(eventUserName, ClientConversationStatus.REGISTERED);
-
-				} else {
-					log.debug("Warteliste von " + eventUserName + " nicht leer.");
-				}
-			}
+            } else {
+                log.debug("Warteliste von " + eventUserName + " nicht leer.");
+            }
 
 		} catch (Exception e) {
 			log.debug("Etwas schief gelaufen");
