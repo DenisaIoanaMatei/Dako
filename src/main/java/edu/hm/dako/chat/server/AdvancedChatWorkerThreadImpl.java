@@ -260,7 +260,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	 * @param receivedPdu
 	 *            . Empfangene PDU
 	 */
-	private void loginEventConfirmAction(ChatPDU receivedPdu) throws Exception {
+	private void loginConfirmAction( ChatPDU receivedPdu) throws Exception {
 
 		String eventUserName = receivedPdu.getEventUserName();
 		String userName = receivedPdu.getUserName();
@@ -321,12 +321,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
             //sobald Warteliste leer, kann eine Response verschickt werden
 			if (clients.getWaitListSize(eventUserName) == 0) {
-
-				try {
-					Thread.sleep(1000);
-				} catch (Exception e) {
-					ExceptionHandler.logException(e);
-				}
 
                 //Ursprünglichen Client ermitteln und Response schicken
                 clients.finish(eventUserName);
@@ -510,21 +504,18 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				break;
 
 			case MESSAGE_CONFIRM:
-				// Message-Confirm vom Client empfangen
 				messageConfirmAction(receivedPdu);
 				break;
 
 			case LOGIN_CONFIRM:
-				// Bestaetigung eines Login-Events angekommen
 				try {
-					loginEventConfirmAction(receivedPdu);
+					loginConfirmAction(receivedPdu);
 				} catch (Exception e) {
 					ExceptionHandler.logException(e);
 				}
 				break;
 
 			case LOGOUT_CONFIRM:
-				// Bestaetigung eines Logout-Events angekommen
 				logoutConfirmAction(receivedPdu);
 				break;
 
