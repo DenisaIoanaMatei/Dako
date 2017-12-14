@@ -37,7 +37,7 @@ public class LoggedInGuiControllerNew {
 	@FXML
 	protected ScrollPane chatPane;
 
-	private ClientGUINew appController;
+	private ClientFxGUINew appController;
 
 	@FXML
 	public void handleEnterPressedNew(KeyEvent event) {
@@ -46,7 +46,7 @@ public class LoggedInGuiControllerNew {
 		}
 	}
 
-	public void setAppControllerNew(ClientGUINew appController) {
+	public void setAppControllerNew(ClientFxGUINew appController) {
 
 		this.appController = appController;
 

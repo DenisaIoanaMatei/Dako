@@ -115,7 +115,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 			pdu = ChatPDU.createLoginEventPdu(userName, receivedPdu);
 			sendLoginListUpdateEvent(pdu);
 
-			// Login Response senden
+			// Login Response senden -> das wird in Advanced nach dem Einsammeln der Confirms erledigt
 			ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
 
 			try {

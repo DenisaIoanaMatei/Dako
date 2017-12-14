@@ -170,16 +170,11 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
 		} else {
 
-			// ADVANCED: Warteliste für Event erzeugen
+			// Warteliste
 			clients.createWaitList(receivedPdu.getUserName());
 
 			// Initiiator ermitteln
 			ClientListEntry sender = clients.getClient(receivedPdu.getUserName());
-
-			// Alle Clients in die Warteliste
-			Vector<String> waitList = sender.getWaitList();
-			log.debug("Warteliste: " + waitList);
-			log.debug("Anzahl der User in der Warteliste: " + waitList.size());
 
 			// Liste der betroffenen Clients ermitteln (bereits in Simple vorhanden)
 			Vector<String> sendList = clients.getClientNameList();
@@ -211,7 +206,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	}
 
 	/**
-	 * ADVANCED: ChatMessageEvent bestaetigen
+	 * Aktion bei ChatMessageEvent
 	 *
 	 * @param receivedPdu
 	 *            . Empfangene PDU
@@ -222,14 +217,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
 		confirmCounter.getAndIncrement();
 
-		log.debug("Message-Confirm-PDU von " + receivedPdu.getUserName() + " fuer die Nachricht vom Client "
-				+ receivedPdu.getEventUserName() + " empfangen");
-
-		log.debug(userName + ": ConfirmCounter fuer ChatMessage erhoeht = " + confirmCounter.get()
-				+ ", Aktueller EventCounter = " + eventCounter.get()
-				+ ", Anzahl gesendeter ChatMessages von dem Client = " + receivedPdu.getSequenceNumber());
-
-		// Respons wurde vorher im Request bereits gesendet
+		// Respons wurde vorher im Request bereits gesendet, in Advanced aber nach Einsammeln der Confirms
 		try {
 			clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
 
@@ -238,9 +226,9 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 				ClientListEntry client = clients.getClient(receivedPdu.getEventUserName());
 				if (client != null) {
 					ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(receivedPdu.getUserName(),
-							receivedPdu.getMessage(), receivedPdu.getNumberOfSentEvents(),
-							receivedPdu.getNumberOfLostConfirms(), receivedPdu.getNumberOfReceivedConfirms(),
-                            receivedPdu.getNumberOfRetries(),
+							receivedPdu.getMessage(), 0,
+							0, 0,
+                            0,
 							client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),
 							(System.nanoTime() - client.getStartTime()));
 
@@ -267,7 +255,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	}
 
 	/**
-	 * ADVANCED: LoginEvent bestaetigen
+	 * Aktion bei LoginEvent
 	 *
 	 * @param receivedPdu
 	 *            . Empfangene PDU
@@ -281,12 +269,9 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
 		confirmCounter.getAndIncrement();
 
-		log.debug("Login-Confirm-PDU von Client " + userName + " fuer die Nachricht vom Client " + eventUserName
-				+ " empfangen");
-
 		try {
+			//aus Warteliste löschen
 			clients.deleteWaitListEntry(eventUserName, userName);
-			log.debug(userName + " aus der Warteliste von " + eventUserName + " ausgetragen");
 
 			if (clients.getClient(eventUserName).getStatus() == ClientConversationStatus.REGISTERING) {
 
@@ -318,7 +303,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	}
 
 	/**
-	 * ADVANCED: LoginEvent bestaetigen
+	 * Aktion LoginEvent
 	 *
 	 * @param receivedPdu
 	 *            . Empfangene PDU
