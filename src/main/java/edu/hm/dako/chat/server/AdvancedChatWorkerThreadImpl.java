@@ -102,7 +102,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("Laenge der Clientliste: " + clients.size());
 			serverGuiInterface.incrNumberOfLoggedInClients();
 
-            // Warteliste
+            // Warteliste erzeugen
             clients.createWaitList(receivedPdu.getUserName());
 
 			// Login-Event an alle Clients (auch an den gerade aktuell
@@ -138,7 +138,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
 		} else {
 
-			// Warteliste
+			// Warteliste erzeugen
 			clients.createWaitList(receivedPdu.getUserName());
 			ChatPDU pdu = ChatPDU.createLogoutEventPdu(userName,receivedPdu);
 
@@ -170,7 +170,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
 		} else {
 
-			// Warteliste
+			// Warteliste erzeugen
 			clients.createWaitList(receivedPdu.getUserName());
 
 			// Liste der betroffenen Clients ermitteln (bereits in Simple vorhanden)
@@ -203,7 +203,9 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	}
 
 	/**
-	 * Aktion bei ChatMessageEvent
+	 * Aktion bei Empfang einer Message-Confirm
+     * Nachdem alle Confirms zu einem Message-Event eingesammelt wurden, wird eine Response an den Sender der
+     * ursprünglichen Nachricht verschickt.
 	 *
 	 * @param receivedPdu
 	 *            . Empfangene PDU
@@ -214,10 +216,11 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
 		confirmCounter.getAndIncrement();
 
-		// Respons wurde vorher im Request bereits gesendet, in Advanced aber nach Einsammeln der Confirms
+        //aus Warteliste löschen
 		try {
 			clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
 
+            //sobald Warteliste leer, kann eine Response verschickt werden
 			if (clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
 
 				ClientListEntry client = clients.getClient(receivedPdu.getEventUserName());
@@ -252,7 +255,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 	}
 
 	/**
-	 * Aktion bei LoginEvent
+	 * Aktion bei Empfang einer Login-Confirm
 	 *
 	 * @param receivedPdu
 	 *            . Empfangene PDU
@@ -285,22 +288,20 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 						throw e;
 					}
 
-					log.debug("Login-Response-PDU an Client " + eventUserName + " gesendet");
 					clients.changeClientStatus(eventUserName, ClientConversationStatus.REGISTERED);
 
 				} else {
-					log.debug("Warteliste von " + eventUserName + " enthält noch "
-							+ clients.getWaitListSize(eventUserName) + " Einträge");
+					log.debug("Warteliste von " + eventUserName + " nicht leer.");
 				}
 			}
 
 		} catch (Exception e) {
-			log.debug("Login-Event-Confirm-PDU fuer nicht vorhandenen Client erhalten: " + eventUserName);
+			log.debug("Etwas schief gelaufen");
 		}
 	}
 
 	/**
-	 * Aktion LoginEvent
+	 * Aktion bei Empfang einer Logout-Confirm
 	 *
 	 * @param receivedPdu
 	 *            . Empfangene PDU
@@ -311,40 +312,33 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 		String userName = receivedPdu.getUserName();
 
 		// Empfangene Confirms hochzaehlen
-		clients.incrNumberOfReceivedChatEventConfirms(receivedPdu.getEventUserName());
+		clients.incrNumberOfReceivedChatEventConfirms(eventUserName);
 		confirmCounter.getAndIncrement();
 
-		log.debug("Logout-Confirm-PDU von Client " + userName + " fuer die Nachricht vom Client " + eventUserName
-				+ " empfangen");
-
 		try {
+            //aus Warteliste löschen
 			clients.deleteWaitListEntry(eventUserName, userName);
-			log.debug(userName + " aus der Warteliste von " + eventUserName + " ausgetragen");
 
+            //sobald Warteliste leer, kann eine Response verschickt werden
 			if (clients.getWaitListSize(eventUserName) == 0) {
 
-				//Bugfix Sleep-Timer um 500ms erhöht
 				try {
 					Thread.sleep(1000);
 				} catch (Exception e) {
 					ExceptionHandler.logException(e);
 				}
 
-                // Worker-Thread des Clients, der den Logout-Request gesendet
-                // hat, auch gleich zum Beenden markieren
+                //Ursprünglichen Client ermitteln und Response schicken
                 clients.finish(eventUserName);
-                log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von " + receivedPdu.getUserName() + ": "
-                        + clients.size());
 				sendLogoutResponse(eventUserName);
 
 
 			} else {
-				log.debug("Warteliste von " + eventUserName + " enthält noch "
-							+ clients.getWaitListSize(eventUserName) + " Einträge");
+				log.debug("Warteliste von " + eventUserName + " nicht leer");
 			}
 
 		} catch (Exception e) {
-			log.debug("Logout-Confirm-PDU fuer nicht vorhandenen Client erhalten: " + eventUserName);
+			log.debug("Etwas ist schief gelaufen");
 		}
 	}
 
