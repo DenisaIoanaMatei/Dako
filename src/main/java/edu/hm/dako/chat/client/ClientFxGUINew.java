@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -111,6 +112,7 @@ public class ClientFxGUINew extends Application implements ClientUserInterface {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
+					    stage.getIcons().add(new Image("file: Logo.png"));
 						stage.setTitle("Angemeldet");
 						stage.setScene(new Scene(root, 600, 400));
                         colourCode = LogInGuiControllerNew.colour;

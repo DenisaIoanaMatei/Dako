@@ -103,7 +103,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 			ExceptionHandler.logException(e);
 		}
 
-		// ADVANCED: Bestaetigung senden + ConfirmCounter erhöhen
+		// Bestaetigung senden + ConfirmCounter erhöhen
 		confirmLogoutEvent(receivedPdu);
 		sharedClientData.confirmCounter.getAndIncrement();
 	}
