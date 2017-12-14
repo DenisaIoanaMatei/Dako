@@ -138,7 +138,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
 		} else {
 
-			// ADVANCED: Warteliste erstellen
+			// Warteliste erstellen
 			clients.createWaitList(receivedPdu.getUserName());
 			ChatPDU pdu = ChatPDU.createLogoutEventPdu(userName,receivedPdu);
 
@@ -154,11 +154,11 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             // In der Advanced-Variante wird noch ein Confirm gesendet, das ist
             // sicherer.
 
-            try {
+            /*try {
                 Thread.sleep(1000);
             } catch (Exception e) {
                 ExceptionHandler.logException(e);
-            }
+            }*/
 		}
 	}
 
