@@ -173,9 +173,6 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 			// Warteliste
 			clients.createWaitList(receivedPdu.getUserName());
 
-			// Initiiator ermitteln
-			ClientListEntry sender = clients.getClient(receivedPdu.getUserName());
-
 			// Liste der betroffenen Clients ermitteln (bereits in Simple vorhanden)
 			Vector<String> sendList = clients.getClientNameList();
 			ChatPDU pdu = ChatPDU.createChatMessageEventPdu(userName, receivedPdu);
